@@ -1,3 +1,4 @@
+import RecipeTemplate from "../Templates/RecipeTemplate.js";
 import Api from "./../api/api.js";
 
 class App {
@@ -7,11 +8,14 @@ class App {
         this.allApliances = null;
         this.allIngredients = null;
 
+        this.$recipeContainer = document.querySelector("#recipes-container");
 
     }
 
     async init() {
-        await this.getData();
+        await this.getData().then(() => {
+            this.renderRecipes();
+        })
     }
 
     async getData() {
@@ -20,17 +24,15 @@ class App {
         console.log("allData: ");
         console.log(this.allData);
         this.allRecipeNames = this.retrieveData("name", false);
-        console.log("allRecipeNames: ");
-        console.log(this.allRecipeNames);
         this.allApliances = this.retrieveData("appliance", true);
-        console.log("allAppliances: ");
-        console.log(this.allApliances);
         this.allIngredients = this.retrieveIngredients();
-        console.log("allIngredients: ");
-        console.log(this.allIngredients);
+    }
 
-
-
+    renderRecipes() {
+        this.allData.forEach(element => {
+            const Template = new RecipeTemplate(element);
+            this.$recipeContainer.appendChild(Template.renderRecipe());
+        });
     }
 
     retrieveData(type, removeDouble) {
