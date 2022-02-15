@@ -4,20 +4,16 @@ export default class ListTemplate {
     }
 
     createList() {
-        const ul = `<ul>
-            ${this.makeList()}
-        </ul>`;
-        ul.className = "scroll";
-        ul.setAttribute("role", "listbox");
-    }
-
-    makeList() {
+        const $ul = document.createElement("ul");
+        $ul.className = "bg-primary rounded scroll";
+        $ul.setAttribute("id", "ingredients-nav");
+        $ul.setAttribute("role", "listbox");
         let list = "";
-        this._ingredients.forEach(element => {
-            const item = `
-            <li role="option">${element}</li>`;
+        this._list.forEach((element) => {
+            const item = `<li class="list-unstyled text-white" role="option">${element}</li>`;
             list += item;
-        });
-        return list;
+        })
+        $ul.innerHTML = list;
+        return $ul;
     }
 }

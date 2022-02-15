@@ -8,6 +8,7 @@
 
 body {
   width: 100%;
+  position: relative;
 }
 /*MOBILE HEADER*/
 header {
@@ -33,7 +34,6 @@ header {
 #main-input {
   background-color: #e6e6e6;
 }
-
 
 #main-search-btn {
   height: 55px;
@@ -78,7 +78,6 @@ header {
 #equipment-search input:focus,
 #ustenils-search input:focus {
   outline: none;
-  
 }
 
 #ingredients-search input::placeholder,
@@ -97,6 +96,10 @@ header {
   height: 20px;
 }
 
+.rotate{
+  transform: rotate(180deg);
+}
+
 #equipment-search input,
 #equipment-search button {
   background-color: #67d8a4;
@@ -105,6 +108,19 @@ header {
 #ustensils-search input,
 #ustensils-search button {
   background-color: #ec6354;
+}
+
+#ingredients-list {
+  width: 250px;
+  position: absolute;
+  left: 0;
+  top: 50px;
+  z-index: 1;
+  display: none;
+}
+
+#ingredients-list li:hover {
+  color: blue;
 }
 
 /*RECIPES*/

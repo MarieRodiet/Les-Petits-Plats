@@ -1,3 +1,4 @@
+import ListTemplate from "../Templates/listTemplate.js";
 import RecipeTemplate from "../Templates/RecipeTemplate.js";
 import Api from "./../api/api.js";
 
@@ -12,6 +13,8 @@ class App {
         this.$ingredientsList = document.querySelector("#ingredients-list");
 
         this.$recipeContainer = document.querySelector("#recipes-container");
+        this.$ingredientsNav = document.querySelector("#ingredients-nav");
+        this.$ingredientsBtn = document.querySelector("#ingredients-btn");
 
     }
 
@@ -81,11 +84,14 @@ class App {
     }
 
     handleIngredientInput() {
-        let events = ["keydown", "change"];
+        let events = ["keydown", "click"];
         events.forEach((element) => {
-            this.$ingredientInput.addEventListener(element, (event) => {
+            this.$ingredientsBtn.addEventListener(element, (event) => {
                 let input = event.target.value;
+                this.$ingredientsBtn.classList.add("rotate");
                 console.log("you clicked, or changed or pressed a key down" + input);
+                let Template = new ListTemplate(this.allIngredients);
+                this.$ingredientsNav.appendChild(Template.createList());
             })
         })
     }
