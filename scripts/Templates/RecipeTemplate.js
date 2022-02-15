@@ -32,19 +32,14 @@ export default class RecipeTemplate {
                     <div class="recipe">
                         <div class="list-ingredients">
                             <ul class="list">
-
                             ${this.makeList()}
-
                             </ul>
                         </div>
                         <p class="instructions">${this._description}</p>
                     </div>
-                </div>
-`;
-        console.log(this.makeList());
+                </div>`;
         cardContainer.innerHTML = card;
         return cardContainer;
-
     }
 
     makeList() {

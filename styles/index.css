@@ -34,9 +34,6 @@ header {
   background-color: #e6e6e6;
 }
 
-input:focus {
-  outline-style: none;
-}
 
 #main-search-btn {
   height: 55px;
@@ -81,6 +78,7 @@ input:focus {
 #equipment-search input:focus,
 #ustenils-search input:focus {
   outline: none;
+  
 }
 
 #ingredients-search input::placeholder,
