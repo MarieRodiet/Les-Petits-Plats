@@ -32,6 +32,7 @@ class App {
         this.allData.forEach(element => {
             const Template = new RecipeTemplate(element);
             this.$recipeContainer.appendChild(Template.renderRecipe());
+
         });
     }
 
@@ -47,7 +48,7 @@ class App {
     }
 
     retrieveIngredients() {
-        let result = this.allData.map((element) => element["ingredients"][0]["ingredient"]);
+        let result = this.allData.map((element) => element["ingredients"][2]["ingredient"]);
         return result;
     }
 }

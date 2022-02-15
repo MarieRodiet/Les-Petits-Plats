@@ -9,11 +9,10 @@ export default class RecipeTemplate {
         this._appliance = recipe.appliance;
         this._ustensils = recipe.ustensils;
         this.$recipeContainer = document.querySelector("#recipes-container");
-
+        this.$list = this.$recipeContainer.querySelector(".recipe-content .recipe .list-ingredients ul");
     }
 
     renderRecipe() {
-        console.log(this._ingredients);
         const cardContainer = document.createElement("div");
         cardContainer.className = "recipe-box";
         const card = `
@@ -33,33 +32,46 @@ export default class RecipeTemplate {
                     <div class="recipe">
                         <div class="list-ingredients">
                             <ul class="list">
-                            ${this._ingredients.forEach((element) => {
-            const item = ` <li class="item">
-                                <span class="name fw-bold">${element.ingredient}</span>
-                                :
-                                <span class="quantity">${element.quantity}${element.unit}</span>
-                            </li>`
-            this.$recipeContainer.getElementsByTagName("ul").innerHTML = item;
-        })}
+
+                            ${this.makeList()}
+
                             </ul>
                         </div>
                         <p class="instructions">${this._description}</p>
                     </div>
                 </div>
-
 `;
+        console.log(this.makeList());
         cardContainer.innerHTML = card;
         return cardContainer;
 
     }
 
-    makeList(element) {
-        const listItem = `
+    makeList() {
+        let list = "";
+        this._ingredients.forEach(element => {
+            const item = this.generateListItem(element);
+            list += item;
+        });
+        return list;
+    }
+
+    generateListItem(element) {
+        return (element.unit) ? `
         <li class="item">
             <span class="name fw-bold">${element.ingredient}</span>
             :
             <span class="quantity">${element.quantity}${element.unit}</span>
+        </li>`
+            : (element.quantity) ? `
+        <li class="item">
+            <span class="name fw-bold">${element.ingredient}</span>
+            :
+            <span class="quantity">${element.quantity}</span>
+        </li>`
+                : `
+        <li class="item">
+            <span class="name fw-bold">${element.ingredient}</span>
         </li>`;
-        return listItem;
     }
 }

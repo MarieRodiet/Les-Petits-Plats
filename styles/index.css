@@ -121,7 +121,7 @@ input:focus {
 .recipe-box {
   width: 100%;
   max-width: 380px;
-  height: auto;
+  height: 364px;
   display: flex;
   flex-direction: column;
   padding: 10px 0;
@@ -135,7 +135,7 @@ input:focus {
 }
 
 .recipe-content {
-  height: auto;
+  height: 180px;
   display: flex;
   flex-direction: column;
   background-color: #e6e6e6;
@@ -144,7 +144,6 @@ input:focus {
 .recipe-content header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   width: 100%;
   margin: 0;
   padding: 0;
@@ -152,12 +151,13 @@ input:focus {
 
 .recipe-name {
   width: 70%;
+  text-align: left;
   padding: 20px 0 0 15px;
 }
 
 .time-box {
   width: 30%;
-  padding: 10px 0px 0 0;
+  padding: 10px 0 0 0;
   text-align: center;
 }
 
@@ -172,11 +172,14 @@ input:focus {
 
 .recipe {
   display: flex;
-  padding: 15px;
+  padding: 5px 15px;
 }
 
 .list-ingredients {
   width: 50%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .list-ingredients ul {
@@ -185,12 +188,21 @@ input:focus {
 }
 
 .item {
-  font-size: 13px;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .instructions {
-  width: 50%;
+  margin-left: 5px;
+  width: 170px;
+  height: 106px;
   font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
 }
 
 /* SMALL TABLET VERSION */
