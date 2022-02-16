@@ -3,17 +3,16 @@ export default class ListTemplate {
         this._list = list;
     }
 
-    createList() {
-        const $ul = document.createElement("ul");
-        $ul.className = "bg-primary rounded scroll";
-        $ul.setAttribute("id", "ingredients-nav");
-        $ul.setAttribute("role", "listbox");
+    getList() {
+        let ulElement = document.createElement("ul");
+        ulElement.className = "rounded scroll";
+        ulElement.setAttribute("role", "listbox");
         let list = "";
         this._list.forEach((element) => {
-            const item = `<li class="list-unstyled text-white" role="option">${element}</li>`;
+            const item = `<li class="list-unstyled text-white" role="option" value=${element}>${element}</li>`;
             list += item;
         })
-        $ul.innerHTML = list;
-        return $ul;
+        ulElement.innerHTML = list;
+        return ulElement;
     }
 }

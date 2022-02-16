@@ -10,6 +10,7 @@ body {
   width: 100%;
   position: relative;
 }
+
 /*MOBILE HEADER*/
 header {
   width: 50%;
@@ -19,108 +20,6 @@ header {
 
 #logo {
   width: 160px;
-}
-
-/*MOBILE MAIN SEARCH*/
-#main-search {
-  display: flex;
-  justify-content: center;
-  width: 80%;
-  margin: 10px auto;
-  height: 55px;
-  max-width: 380px;
-}
-
-#main-input {
-  background-color: #e6e6e6;
-}
-
-#main-search-btn {
-  height: 55px;
-  width: 55px;
-  background-color: #e6e6e6;
-}
-
-#main-search-btn:hover {
-  background-color: #67d8a4;
-  color: white;
-}
-
-#main-search-btn svg {
-  width: 25px;
-  height: 25px;
-}
-
-/*MOBILE SECONDARY SEARCH*/
-
-#secondary-search {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-#ingredients-search,
-#equipment-search,
-#ustensils-search {
-  margin: 10px auto;
-  height: 55px;
-  width: 80%;
-  max-width: 380px;
-}
-
-#ingredients-search input,
-#equipment-search input,
-#ustensils-search input {
-  width: 70%;
-}
-
-#ingredients-search input:focus,
-#equipment-search input:focus,
-#ustenils-search input:focus {
-  outline: none;
-}
-
-#ingredients-search input::placeholder,
-#equipment-search input::placeholder,
-#ustensils-search input::placeholder {
-  color: white;
-}
-
-.s-search-btn {
-  width: 30%;
-  border: none;
-}
-
-.s-search-btn svg {
-  width: 20px;
-  height: 20px;
-}
-
-.rotate{
-  transform: rotate(180deg);
-}
-
-#equipment-search input,
-#equipment-search button {
-  background-color: #67d8a4;
-}
-
-#ustensils-search input,
-#ustensils-search button {
-  background-color: #ec6354;
-}
-
-#ingredients-list {
-  width: 250px;
-  position: absolute;
-  left: 0;
-  top: 50px;
-  z-index: 1;
-  display: none;
-}
-
-#ingredients-list li:hover {
-  color: blue;
 }
 
 /*RECIPES*/
@@ -227,39 +126,12 @@ header {
   }
 }
 
-/* BIG TABLET VERSION */
-@media only screen and (min-width: 600px) {
-  #main-search {
-    max-width: none;
-  }
-
-  #secondary-search {
-    display: flex;
-    flex-direction: row;
-    width: 80%;
-    margin: 0 auto;
-  }
-
-  #ingredients-search,
-  #equipment-search,
-  #ustensils-search {
-    width: 140px;
-    max-width: 100%;
-    margin: 0 10px 0 0;
-  }
-
-  #equipment-search,
-  #ustensils-search {
-    margin: 0 10px;
-  }
-}
-
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 950px) {
   #recipes-container {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-evenly;
   }
 
   .recipe-box {

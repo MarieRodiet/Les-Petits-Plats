@@ -8,14 +8,15 @@ export default class RecipeTemplate {
         this._description = recipe.description;
         this._appliance = recipe.appliance;
         this._ustensils = recipe.ustensils;
+
         this.$recipeContainer = document.querySelector("#recipes-container");
         this.$list = this.$recipeContainer.querySelector(".recipe-content .recipe .list-ingredients ul");
     }
 
     renderRecipe() {
-        const cardContainer = document.createElement("div");
+        let cardContainer = document.createElement("div");
         cardContainer.className = "recipe-box";
-        const card = `
+        let card = `
                 <div class="recipe-picture rounded-top"></div>
                 <div class="recipe-content rounded-bottom">
                     <header>
@@ -32,7 +33,7 @@ export default class RecipeTemplate {
                     <div class="recipe">
                         <div class="list-ingredients">
                             <ul class="list">
-                            ${this.makeList()}
+                            ${this.getList()}
                             </ul>
                         </div>
                         <p class="instructions">${this._description}</p>
@@ -42,16 +43,16 @@ export default class RecipeTemplate {
         return cardContainer;
     }
 
-    makeList() {
+    getList() {
         let list = "";
         this._ingredients.forEach(element => {
-            const item = this.generateListItem(element);
+            let item = this.getListItem(element);
             list += item;
         });
         return list;
     }
 
-    generateListItem(element) {
+    getListItem(element) {
         return (element.unit) ? `
         <li class="item">
             <span class="name fw-bold">${element.ingredient}</span>
