@@ -21,11 +21,11 @@ class App {
     }
 
     async init() {
-        this.handleMainInput();
-        this.handleIngredientInput();
         await this.getData().then(() => {
             this.renderRecipes(this._allData);
         })
+        this.handleMainInput();
+        this.handleIngredientInput();
     }
 
     async getData() {
@@ -86,6 +86,14 @@ class App {
     }
 
     handleIngredientInput() {
+        //create dropdown, and its functionality
+        let Template = new ListTemplate(this._allIngredients);
+        Template.handleUlElement();
+        this.$ingredientsNav.appendChild(Template.getList());
+    }
+
+    /*
+    handleIngredientInput() {
         let events = ["keydown", "click"];
         events.forEach((element) => {
             this.$ingredientsBtn.addEventListener(element, () => {
@@ -95,19 +103,9 @@ class App {
                 this.handleListItems(this.$ingredientsNav);
             })
         })
-    }
-
-    handleListItems(inputBtn) {
-        let events = ["keydown", "click"];
-        events.forEach((element) => {
-            inputBtn.querySelector("ul li").addEventListener(element, (event) => {
-                console.log(event);
-                console.log("you clicked on me");
-            })
-        })
+    }*/
 
 
-    }
 
     getDataChunk(type, isDouble) {
         let result = this._allData.map(element => element[type]);
@@ -128,7 +126,15 @@ class App {
         let unique = ingredients.filter((element, index) => {
             return ingredients.indexOf(element) === index;
         })
-        return unique;
+        return unique.sort((a, b) => {
+            if (a < b) {
+                return -1;
+            }
+            if (a > b) {
+                return 1;
+            }
+            return 0;
+        });
     }
 }
 
