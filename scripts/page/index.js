@@ -48,34 +48,21 @@ class App {
     }
 
     handleMainInput() {
-        let events = ["keydown", "change"];
+        let events = ["keyup", "change", "Backspace"];
         events.forEach((element) => {
             this.$mainInput.addEventListener(element, (event) => {
                 let input = event.target.value;
                 let filtered = [];
-                if (input.length >= 2) {
-                    console.log("find recipe");
-                    this.allData.filter((element) => {
-                        if ((element.name.toLowerCase()).includes(input.toLowerCase()) === true) {
+                if (input.length >= 3 || input.length > 0 && event.key === "Backspace") {
+                    const regex = new RegExp(input);
+                    this._allData.filter((element) => {
+                        if (regex.test(element.name.toLowerCase())) {
                             filtered.push(element);
                         }
-                        if ((element.description.toLowerCase()).includes(input.toLowerCase()) === true) {
+                        else if (regex.test(element.description.toLowerCase())) {
                             filtered.push(element);
                         }
-
-                        if ((element.ingredients[0].ingredient.toLowerCase()).includes(input.toLowerCase()) === true) {
-                            console.log("similar ingredient");
-                            console.log(element.ingredients[0].ingredient);
-                        }
-                        this.renderRecipes(filtered);
-                    });
-                }
-                if (event.key === "Backspace") {
-                    this.allData.filter((element) => {
-                        if ((element.name.toLowerCase()).includes(input.toLowerCase()) === true) {
-                            filtered.push(element);
-                        }
-                        if ((element.description.toLowerCase()).includes(input.toLowerCase()) === true) {
+                        else if (this.findIngredient(element.ingredients, regex)) {
                             filtered.push(element);
                         }
                         this.renderRecipes(filtered);
@@ -83,6 +70,21 @@ class App {
                 }
             })
         })
+    }
+
+    //returns if ingredient matches the regex
+    findIngredient(ingredientsArray, regex) {
+        let isFound = false;
+        let ingredientsNames = [];
+        for (let i = 0; i < ingredientsArray.length; i++) {
+            ingredientsNames.push(ingredientsArray[i].ingredient.toLowerCase());
+        }
+        for (let i = 0; i < ingredientsNames.length; i++) {
+            if (regex.test(ingredientsNames[i])) {
+                isFound = true;
+            }
+        }
+        return isFound;
     }
 
     handleIngredientInput() {
@@ -92,22 +94,8 @@ class App {
         this.$ingredientsNav.appendChild(Template.getList());
     }
 
-    /*
-    handleIngredientInput() {
-        let events = ["keydown", "click"];
-        events.forEach((element) => {
-            this.$ingredientsBtn.addEventListener(element, () => {
-                this.$ingredientsBtn.querySelector("svg").classList.add("rotate");
-                let Template = new ListTemplate(this._allIngredients);
-                this.$ingredientsNav.appendChild(Template.getList());
-                this.handleListItems(this.$ingredientsNav);
-            })
-        })
-    }*/
-
-
-
     getDataChunk(type, isDouble) {
+        //creer regex avec les caracteres differents
         let result = this._allData.map(element => element[type]);
         if (isDouble) {
             let unique = result.filter((c, index) => {

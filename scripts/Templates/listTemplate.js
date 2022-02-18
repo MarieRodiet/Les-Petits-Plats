@@ -1,8 +1,15 @@
+import BadgeTemplate from "./BadgeTemplate.js";
+
 export default class ListTemplate {
     constructor(list) {
         this._list = list;
+        this._badges = [];
+
         this.$ulElement = document.createElement("ul");
+        this.$ingredientsNav = document.querySelector("#ingredients-nav");
         this.$ingredientsBtn = document.querySelector("#ingredients-btn");
+        this.$badges = document.querySelector("#badges");
+        //this.handleAddBadge = this.handleAddBadge.bind(this);
     }
 
     getList() {
@@ -12,7 +19,7 @@ export default class ListTemplate {
         this.$ulElement.setAttribute("aria-haspopup", "true");
         let list = "";
         this._list.forEach((element) => {
-            const item = `<li tabindex="0" class="list-unstyled" role="option" value=${element}>${element}</li>`;
+            const item = `<li category ="ingredients" tabindex="0" class="list-unstyled" role="option" value="${element}">${element}</li>`;
             list += item;
         })
         this.$ulElement.innerHTML = list;
@@ -20,20 +27,10 @@ export default class ListTemplate {
     }
 
     handleUlElement() {
-        let events = ["click"];
-        events.forEach((element) => {
-            this.$ingredientsBtn.addEventListener(element, () => {
-                this.toggleNavBar();
-            })
-        })
-    }
-    handleListItems(inputBtn) {
-        let events = ["keydown", "click"];
-        events.forEach((element) => {
-            inputBtn.querySelector("ul li").addEventListener(element, (event) => {
-                console.log(event);
-                console.log("you clicked on me");
-            })
+
+        this.$ingredientsBtn.addEventListener("click", () => {
+            this.toggleNavBar();
+            this.handleAddBadge();
         })
     }
 
@@ -43,12 +40,49 @@ export default class ListTemplate {
             this.$ingredientsBtn.querySelector("svg").classList.add("up");
             this.$ingredientsBtn.querySelector("svg").classList.remove("down");
             this.$ulElement.setAttribute("aria-expanded", "true");
+            //this.handleDeleteBadges();
         }
         else {
-            this.$ulElement.style.display = "none";
-            this.$ingredientsBtn.querySelector("svg").classList.add("down");
-            this.$ingredientsBtn.querySelector("svg").classList.remove("up");
-            this.$ulElement.setAttribute("aria-expanded", "false");
+            this.closeNavBar();
+
         }
     }
+
+    closeNavBar() {
+        this.$ulElement.style.display = "none";
+        this.$ingredientsBtn.querySelector("svg").classList.add("down");
+        this.$ingredientsBtn.querySelector("svg").classList.remove("up");
+        this.$ulElement.setAttribute("aria-expanded", "false");
+    }
+
+    handleAddBadge() {
+        console.log("inside handleAddBadge() from index.js");
+        let liElements = this.$ulElement.querySelectorAll("li");
+        for (const li of liElements) {
+            li.addEventListener("click", () => {
+                console.log("you clicked");
+                this.closeNavBar();
+                let Template = new BadgeTemplate({
+                    category: li.category,
+                    item: li.textContent
+                });
+                this.$badges.appendChild(Template.getBadge());
+                this.closeNavBar();
+                //remove evenListeners from all liElements
+            }, {
+                once: true,
+                passive: true,
+                capture: true
+            });
+        }
+    }
+
+    handleDeleteBadges() {
+        this.$badges.addEventListener("click", (event) => {
+            console.log("you want to deleted me?");
+            console.log(event);
+            console.log(this);
+        })
+    }
+
 }
