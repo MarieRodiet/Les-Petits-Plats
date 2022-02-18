@@ -58,7 +58,6 @@
 #equipment-search,
 #ustensils-search {
   margin: 10px auto;
-  height: 55px;
   width: 80%;
   max-width: 380px;
 }
@@ -113,16 +112,17 @@
   justify-content: start;
   width: 80%;
   max-width: 380px;
-  margin: 10px auto;
+  margin: 0px auto;
 }
 
 #ingredients-nav {
+  background-color: red;
   width: 80%;
   max-width: 380px;
   position: absolute;
   z-index: 3;
-  top: 190px;
-  border-radius: 5px;
+  top: 33px;
+  left: 1px;
 }
 
 #ingredients-nav ul {
@@ -208,7 +208,7 @@ path.deleteSvg {
   #ingredients-search,
   #equipment-search,
   #ustensils-search {
-    max-width: 180px;
+    max-width: 380px;
     width: 100%;
     margin: 0 10px 0 0;
   }
@@ -219,16 +219,13 @@ path.deleteSvg {
   }
 
   .navs {
-    width: 100%;
     margin-left: 10%;
-    max-width: 390px;
+    max-width: 380px;
+    width: 100%;
   }
 
   #ingredients-nav ul {
     top: 190px;
-    -webkit-column-count: 2;
-    -moz-column-count: 2;
-    column-count: 2;
   }
 }
 
@@ -246,10 +243,5 @@ path.deleteSvg {
 
   #ingredients-nav {
     max-width: inherit;
-  }
-  #ingredients-nav ul {
-    -webkit-column-count: 3;
-    -moz-column-count: 3;
-    column-count: 3;
   }
 }

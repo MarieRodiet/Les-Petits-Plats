@@ -23,14 +23,16 @@ export default class ListTemplate {
             list += item;
         })
         this.$ulElement.innerHTML = list;
+        let liElements = this.$ulElement.querySelectorAll("li");
+        for (const li of liElements) {
+            li.addEventListener("click", () => this.handleAddBadge(event));
+        }
         return this.$ulElement;
     }
 
     handleUlElement() {
-
         this.$ingredientsBtn.addEventListener("click", () => {
             this.toggleNavBar();
-            this.handleAddBadge();
         })
     }
 
@@ -40,7 +42,6 @@ export default class ListTemplate {
             this.$ingredientsBtn.querySelector("svg").classList.add("up");
             this.$ingredientsBtn.querySelector("svg").classList.remove("down");
             this.$ulElement.setAttribute("aria-expanded", "true");
-            //this.handleDeleteBadges();
         }
         else {
             this.closeNavBar();
@@ -55,34 +56,23 @@ export default class ListTemplate {
         this.$ulElement.setAttribute("aria-expanded", "false");
     }
 
-    handleAddBadge() {
-        console.log("inside handleAddBadge() from index.js");
-        let liElements = this.$ulElement.querySelectorAll("li");
-        for (const li of liElements) {
-            li.addEventListener("click", () => {
-                console.log("you clicked");
-                this.closeNavBar();
-                let Template = new BadgeTemplate({
-                    category: li.category,
-                    item: li.textContent
-                });
-                this.$badges.appendChild(Template.getBadge());
-                this.closeNavBar();
-                //remove evenListeners from all liElements
-            }, {
-                once: true,
-                passive: true,
-                capture: true
-            });
-        }
+    handleAddBadge(event) {
+        let Template = new BadgeTemplate({
+            category: event.srcElement.getAttribute("category"),
+            item: event.srcElement.textContent
+        });
+        console.log(this.$badges);
+        this.$badges.appendChild(Template.getBadge());
+        /*this.$badges.querySelectorAll(".badge path.deleteSvg").addEventListener("click", (event) => {
+            this.handleDeleteBadge(event);
+        });*/
+        this.closeNavBar();
     }
 
-    handleDeleteBadges() {
-        this.$badges.addEventListener("click", (event) => {
-            console.log("you want to deleted me?");
-            console.log(event);
-            console.log(this);
-        })
+    handleDeleteBadge(event) {
+        console.log("you want to deleted me?");
+        console.log(event.srcElement.id);
     }
+
 
 }
