@@ -9,7 +9,7 @@ export default class BadgeTemplate {
     getBadge() {
         this.$container.className = "badgeContainer";
         let badgeCard = `
-        <span class="badge">
+        <span category=${this._category} item=${this._item} class="badge">
             ${this._item}
             <svg viewBox="0 0 512 512">
             <g>

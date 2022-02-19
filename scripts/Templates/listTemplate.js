@@ -9,7 +9,6 @@ export default class ListTemplate {
         this.$ingredientsNav = document.querySelector("#ingredients-nav");
         this.$ingredientsBtn = document.querySelector("#ingredients-btn");
         this.$badges = document.querySelector("#badges");
-        //this.handleAddBadge = this.handleAddBadge.bind(this);
     }
 
     getList() {
@@ -57,21 +56,44 @@ export default class ListTemplate {
     }
 
     handleAddBadge(event) {
-        let Template = new BadgeTemplate({
+        let newBadge = {
             category: event.srcElement.getAttribute("category"),
             item: event.srcElement.textContent
-        });
-        console.log(this.$badges);
-        this.$badges.appendChild(Template.getBadge());
-        /*this.$badges.querySelectorAll(".badge path.deleteSvg").addEventListener("click", (event) => {
-            this.handleDeleteBadge(event);
-        });*/
+        };
+        let Template = new BadgeTemplate(newBadge);
+        let badge = Template.getBadge();
+        badge.addEventListener("click", () => this.DeleteBadge(badge));
+        this.$badges.appendChild(badge);
+        this._badges.push(newBadge)
         this.closeNavBar();
+        console.log(this._badges);
     }
 
-    handleDeleteBadge(event) {
-        console.log("you want to deleted me?");
-        console.log(event.srcElement.id);
+    DeleteBadge(badge) {
+        let spanInBadge = badge.querySelector(".badge");
+        let toBeDeleted = {
+            category: spanInBadge.getAttribute("category"),
+            item: spanInBadge.getAttribute("item")
+        };
+        badge.innerHTML = "";
+        console.log(toBeDeleted);
+        let index = -1;
+        let removed = "";
+        for (let badge of this._badges) {
+            index++;
+            if (badge.category === toBeDeleted.category && badge.item === toBeDeleted.item) {
+                console.log(badge);
+                console.log(index);
+                removed = this._badges.splice(index, 1);
+                index = 0;
+                removed = "";
+            }
+        }
+        console.log(removed);
+        console.log(this._badges);
+
+
+
     }
 
 

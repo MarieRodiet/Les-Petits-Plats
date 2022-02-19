@@ -113,6 +113,7 @@
   width: 80%;
   max-width: 380px;
   margin: 0px auto;
+  position: absolute;
 }
 
 #ingredients-nav {
@@ -121,7 +122,7 @@
   max-width: 380px;
   position: absolute;
   z-index: 3;
-  top: 33px;
+  top: 43px;
   left: 1px;
 }
 
@@ -133,7 +134,7 @@
   overflow: scroll;
 }
 
-li {
+#ingredients-nav ul li {
   width: 99%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -218,14 +219,15 @@ path.deleteSvg {
     margin: 0 10px;
   }
 
-  .navs {
-    margin-left: 10%;
-    max-width: 380px;
-    width: 100%;
+  .navs #ingredients-nav {
+    width: 400px;
+    max-width: none;
+    top: 45px;
   }
-
-  #ingredients-nav ul {
-    top: 190px;
+  .navs #ingredients-nav ul {
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-count: 2;
   }
 }
 
@@ -237,11 +239,13 @@ path.deleteSvg {
     margin: 0 20px 0 0;
   }
 
-  .navs {
-    max-width: 510px;
+  .navs #ingredients-nav {
+    width: 550px;
   }
 
-  #ingredients-nav {
-    max-width: inherit;
+  .navs #ingredients-nav ul {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
   }
 }

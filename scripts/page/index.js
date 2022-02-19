@@ -12,11 +12,8 @@ class App {
 
         //DOM elements
         this.$mainInput = document.querySelector("#main-input");
-        this.$ingredientInput = document.querySelector("#input-ingredients");
-        this.$ingredientsList = document.querySelector("#ingredients-list");
         this.$recipeContainer = document.querySelector("#recipes-container");
         this.$ingredientsNav = document.querySelector("#ingredients-nav");
-        this.$ingredientsBtn = document.querySelector("#ingredients-btn");
 
     }
 
@@ -37,6 +34,37 @@ class App {
         this._allAppliances = this.getDataChunk("appliance", true);
         this._allIngredients = this.getIngredients();
         console.log(this._allIngredients);
+    }
+
+    getDataChunk(type, isDouble) {
+        //creer regex avec les caracteres differents
+        let result = this._allData.map(element => element[type]);
+        if (isDouble) {
+            let unique = result.filter((c, index) => {
+                return result.indexOf(c) === index;
+            })
+            result = unique;
+        }
+        return result;
+    }
+
+    getIngredients() {
+        const ingredientsArray = this.getDataChunk("ingredients", false);
+        let ingredients = [];
+        ingredientsArray.map(element =>
+            element.forEach(val => ingredients.push(val.ingredient)));
+        let unique = ingredients.filter((element, index) => {
+            return ingredients.indexOf(element) === index;
+        })
+        return unique.sort((a, b) => {
+            if (a < b) {
+                return -1;
+            }
+            if (a > b) {
+                return 1;
+            }
+            return 0;
+        });
     }
 
     renderRecipes(recipes) {
@@ -94,36 +122,6 @@ class App {
         this.$ingredientsNav.appendChild(Template.getList());
     }
 
-    getDataChunk(type, isDouble) {
-        //creer regex avec les caracteres differents
-        let result = this._allData.map(element => element[type]);
-        if (isDouble) {
-            let unique = result.filter((c, index) => {
-                return result.indexOf(c) === index;
-            })
-            result = unique;
-        }
-        return result;
-    }
-
-    getIngredients() {
-        const ingredientsArray = this.getDataChunk("ingredients", false);
-        let ingredients = [];
-        ingredientsArray.map(element =>
-            element.forEach(val => ingredients.push(val.ingredient)));
-        let unique = ingredients.filter((element, index) => {
-            return ingredients.indexOf(element) === index;
-        })
-        return unique.sort((a, b) => {
-            if (a < b) {
-                return -1;
-            }
-            if (a > b) {
-                return 1;
-            }
-            return 0;
-        });
-    }
 }
 
 const app = new App();
