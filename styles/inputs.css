@@ -118,7 +118,9 @@
   position: absolute;
 }
 
-#ingredients-nav {
+#ingredients-nav,
+#equipments-nav,
+#ustensils-nav {
   width: 80%;
   max-width: 380px;
   position: absolute;
@@ -129,15 +131,15 @@
 
 #equipments-nav {
   background-color: #67d8a4 !important;
-  width: 80%;
-  max-width: 380px;
-  position: absolute;
-  z-index: 3;
-  top: 43px;
-  left: 1px;
 }
 
-#ingredients-nav ul {
+#ustensils-nav {
+  background-color: #ec6354 !important;
+}
+
+#ingredients-nav ul,
+#equipments-nav ul,
+#ustensils-nav ul {
   display: none;
   padding: 0 12px;
   margin: 0;
@@ -145,15 +147,9 @@
   overflow: scroll;
 }
 
-#equipments-nav ul {
-  display: none;
-  padding: 0 12px;
-  margin: 0;
-  max-height: 60vh;
-  overflow: scroll;
-}
-
-#ingredients-nav ul li {
+#ingredients-nav ul li,
+#equipments-nav ul li,
+#ustensils-nav ul li {
   width: 99%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -164,23 +160,9 @@
   line-height: 1.6;
 }
 
-#equipments-nav ul li {
-  width: 99%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  color: white;
-  line-height: 1.6;
-}
-
-#ingredients-nav li:hover {
-  color: #b6babe;
-  cursor: pointer;
-}
-
-#equipments-nav li:hover {
+#ingredients-nav li:hover,
+#equipments-nav li:hover,
+#ustensils-nav li:hover {
   color: #b6babe;
   cursor: pointer;
 }
@@ -249,6 +231,7 @@ path.deleteSvg {
     margin: 0 10px 0 0;
   }
 
+  #ingredients-search,
   #equipments-search,
   #ustensils-search {
     margin: 0 10px;
@@ -260,6 +243,16 @@ path.deleteSvg {
     max-width: none;
     top: 45px;
   }
+
+  .navs #equipments-nav {
+    left: -100px;
+  }
+
+  .navs #ustensils-nav {
+    width: 250px;
+    transform: translateX(-60px);
+  }
+
   .navs #ingredients-nav ul,
   .navs #equipments-nav ul {
     -webkit-column-count: 2;

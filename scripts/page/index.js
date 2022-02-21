@@ -9,16 +9,21 @@ class App {
         this._allRecipeNames = null;
         this._allAppliances = null;
         this._allIngredients = null;
+        this._allUstensils = null;
 
         //DOM elements
         this.$mainInput = document.querySelector("#main-input");
         this.$recipeContainer = document.querySelector("#recipes-container");
+        this.$badges = document.querySelector("#badges");
+
         this.$ingredientsNav = document.querySelector("#ingredients-nav");
         this.$equipmentsNav = document.querySelector("#equipments-nav");
+        this.$ustensilsNav = document.querySelector("#ustensils-nav");
 
         this.$ingredientsBtn = document.querySelector("#ingredients-btn");
         this.$equipmentBtn = document.querySelector("#equipments-btn");
         this.$ustensilsBtn = document.querySelector("#ustensils-btn");
+
 
     }
 
@@ -29,18 +34,17 @@ class App {
         this.handleMainInput();
         this.handleIngredientInput();
         this.handleEquipmentInput();
+        this.handleUstensilsInput();
+        this.getAllBadges();
     }
 
     async getData() {
         const API = new Api("data/recipes.json");
         this._allData = await API.getJsonData();
-        console.log("allData: ");
-        console.log(this._allData);
         this._allRecipeNames = this.getDataChunk("name", false);
         this._allAppliances = this.getDataChunk("appliance", true);
+        this._allUstensils = this.getUstensils();
         this._allIngredients = this.getIngredients();
-        console.log(this._allIngredients);
-        console.log(this._allAppliances);
     }
 
     getDataChunk(type, isDouble) {
@@ -53,6 +57,16 @@ class App {
             result = unique;
         }
         return this.sortAlphabetically(result);
+    }
+
+    getUstensils() {
+        const ustensilsArray = this.getDataChunk("ustensils", true).flat()
+        let ustensils = ustensilsArray.map(element =>
+            element[0].toUpperCase() + element.slice(1).toLowerCase());
+        let unique = ustensils.filter((element, index) => {
+            return ustensils.indexOf(element) === index;
+        })
+        return this.sortAlphabetically(unique);
     }
 
     getIngredients() {
@@ -159,6 +173,31 @@ class App {
         let Template = new ListTemplate(this._allAppliances, "#equipments-btn", "#equipments-nav", "equipments");
         Template.handleUlElement(this.$equipmentBtn);
         this.$equipmentsNav.appendChild(Template.getList());
+    }
+
+    handleUstensilsInput() {
+        let Template = new ListTemplate(this._allUstensils, "#ustensils-btn", "#ustensils-nav", "ustensils");
+        Template.handleUlElement(this.$ustensilsBtn);
+        this.$ustensilsNav.appendChild(Template.getList());
+    }
+
+    getAllBadges() {
+        let badges = this.$badges.querySelectorAll(".badgeContainer span");
+        /*
+        this._allData.filter((element) => {
+            if (regex.test(element.name.toLowerCase())) {
+                filtered.push(element);
+            }
+            else if (regex.test(element.description.toLowerCase())) {
+                filtered.push(element);
+            }
+            else if (this.findIngredient(element.ingredients, regex)) {
+                filtered.push(element);
+            }
+            this.renderRecipes(filtered);
+
+        });*/
+        console.log(badges);
     }
 
 }
