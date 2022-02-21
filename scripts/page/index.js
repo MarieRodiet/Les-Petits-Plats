@@ -14,6 +14,11 @@ class App {
         this.$mainInput = document.querySelector("#main-input");
         this.$recipeContainer = document.querySelector("#recipes-container");
         this.$ingredientsNav = document.querySelector("#ingredients-nav");
+        this.$equipmentsNav = document.querySelector("#equipments-nav");
+
+        this.$ingredientsBtn = document.querySelector("#ingredients-btn");
+        this.$equipmentBtn = document.querySelector("#equipments-btn");
+        this.$ustensilsBtn = document.querySelector("#ustensils-btn");
 
     }
 
@@ -23,6 +28,7 @@ class App {
         })
         this.handleMainInput();
         this.handleIngredientInput();
+        this.handleEquipmentInput();
     }
 
     async getData() {
@@ -34,6 +40,7 @@ class App {
         this._allAppliances = this.getDataChunk("appliance", true);
         this._allIngredients = this.getIngredients();
         console.log(this._allIngredients);
+        console.log(this._allAppliances);
     }
 
     getDataChunk(type, isDouble) {
@@ -45,18 +52,44 @@ class App {
             })
             result = unique;
         }
-        return result;
+        return this.sortAlphabetically(result);
     }
 
     getIngredients() {
         const ingredientsArray = this.getDataChunk("ingredients", false);
         let ingredients = [];
         ingredientsArray.map(element =>
-            element.forEach(val => ingredients.push(val.ingredient)));
+            element.forEach(val => {
+                ingredients.push(val.ingredient[0].toUpperCase() + val.ingredient.slice(1).toLowerCase())
+            }
+            ));
         let unique = ingredients.filter((element, index) => {
+            let withoutS = "";
+            //element finishes with an s
+            if (element[element.length - 1] === "s") {
+                withoutS = element.slice(0, element.length - 1);
+                //if there is a duplicate found, remove that duplicate from array
+                if (ingredients.indexOf(withoutS) !== -1) {
+                    ingredients.splice(ingredients.indexOf(withoutS), 1);
+                    return ingredients.indexOf(element) === index;
+                }
+            }
+            //element does not finish with an s
+            else if (element[element.length - 1] !== "s") {
+                //if there is a duplicate found, remove that duplicate from array
+                if (ingredients.indexOf(element + "s") !== -1) {
+                    ingredients.splice(ingredients.indexOf(element + "s"), 1);
+                    return ingredients.indexOf(element) === index;
+                }
+            }
+            //ingredients that finish
             return ingredients.indexOf(element) === index;
-        })
-        return unique.sort((a, b) => {
+        });
+        return this.sortAlphabetically(unique);
+    }
+
+    sortAlphabetically(array) {
+        return array.sort((a, b) => {
             if (a < b) {
                 return -1;
             }
@@ -100,7 +133,7 @@ class App {
         })
     }
 
-    //returns if ingredient matches the regex
+    //returns true ingredient matches the regex
     findIngredient(ingredientsArray, regex) {
         let isFound = false;
         let ingredientsNames = [];
@@ -117,9 +150,15 @@ class App {
 
     handleIngredientInput() {
         //create dropdown, and its functionality
-        let Template = new ListTemplate(this._allIngredients);
+        let Template = new ListTemplate(this._allIngredients, "#ingredients-btn", "#ingredients-nav", "ingredients");
         Template.handleUlElement();
         this.$ingredientsNav.appendChild(Template.getList());
+    }
+
+    handleEquipmentInput() {
+        let Template = new ListTemplate(this._allAppliances, "#equipments-btn", "#equipments-nav", "equipments");
+        Template.handleUlElement(this.$equipmentBtn);
+        this.$equipmentsNav.appendChild(Template.getList());
     }
 
 }

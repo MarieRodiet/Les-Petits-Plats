@@ -1,13 +1,18 @@
 import BadgeTemplate from "./BadgeTemplate.js";
 
 export default class ListTemplate {
-    constructor(list) {
+    constructor(list, btn, nav, type) {
         this._list = list;
+        this._btn = btn;
+        this._nav = nav;
+        this._type = type;
         this._badges = [];
 
         this.$ulElement = document.createElement("ul");
-        this.$ingredientsNav = document.querySelector("#ingredients-nav");
-        this.$ingredientsBtn = document.querySelector("#ingredients-btn");
+
+        this.$Nav = document.querySelector(this._nav);
+        this.$Btn = document.querySelector(this._btn);
+
         this.$badges = document.querySelector("#badges");
     }
 
@@ -18,7 +23,7 @@ export default class ListTemplate {
         this.$ulElement.setAttribute("aria-haspopup", "true");
         let list = "";
         this._list.forEach((element) => {
-            const item = `<li category ="ingredients" tabindex="0" class="list-unstyled" role="option" value="${element}">${element}</li>`;
+            const item = `<li category ="${this._type}" tabindex="0" class="list-unstyled" role="option" value="${element}">${element}</li>`;
             list += item;
         })
         this.$ulElement.innerHTML = list;
@@ -30,7 +35,7 @@ export default class ListTemplate {
     }
 
     handleUlElement() {
-        this.$ingredientsBtn.addEventListener("click", () => {
+        this.$Btn.addEventListener("click", () => {
             this.toggleNavBar();
         })
     }
@@ -38,8 +43,8 @@ export default class ListTemplate {
     toggleNavBar() {
         if (!this.$ulElement.getAttribute('style') || this.$ulElement.getAttribute('style') === 'display: none;') {
             this.$ulElement.style.display = "block";
-            this.$ingredientsBtn.querySelector("svg").classList.add("up");
-            this.$ingredientsBtn.querySelector("svg").classList.remove("down");
+            this.$Btn.querySelector("svg").classList.add("up");
+            this.$Btn.querySelector("svg").classList.remove("down");
             this.$ulElement.setAttribute("aria-expanded", "true");
         }
         else {
@@ -50,8 +55,8 @@ export default class ListTemplate {
 
     closeNavBar() {
         this.$ulElement.style.display = "none";
-        this.$ingredientsBtn.querySelector("svg").classList.add("down");
-        this.$ingredientsBtn.querySelector("svg").classList.remove("up");
+        this.$Btn.querySelector("svg").classList.add("down");
+        this.$Btn.querySelector("svg").classList.remove("up");
         this.$ulElement.setAttribute("aria-expanded", "false");
     }
 
@@ -91,9 +96,6 @@ export default class ListTemplate {
         }
         console.log(removed);
         console.log(this._badges);
-
-
-
     }
 
 

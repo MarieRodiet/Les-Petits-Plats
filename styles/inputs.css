@@ -55,7 +55,7 @@
 }
 
 #ingredients-search,
-#equipment-search,
+#equipments-search,
 #ustensils-search {
   margin: 10px auto;
   width: 80%;
@@ -69,7 +69,6 @@
 
 #secondary-search-section input:focus + .s-search-btn {
   outline: none;
-  box-shadow: 10px 5px 5px red;
 }
 
 #secondary-search-section input::placeholder {
@@ -79,7 +78,6 @@
 .s-search-btn {
   width: 30%;
   border: none;
-  background-color: red;
 }
 
 .s-search-btn svg {
@@ -95,9 +93,13 @@
   transform: rotate(0deg);
 }
 
-#equipment-search input,
-#equipment-search button {
-  background-color: #67d8a4;
+#ingredients-search input,
+#ingredients-search button {
+  background-color: #0d6efd !important;
+}
+#equipments-search input,
+#equipments-search button {
+  background-color: #67d8a4 !important;
 }
 
 #ustensils-search input,
@@ -117,7 +119,16 @@
 }
 
 #ingredients-nav {
-  background-color: red;
+  width: 80%;
+  max-width: 380px;
+  position: absolute;
+  z-index: 3;
+  top: 43px;
+  left: 1px;
+}
+
+#equipments-nav {
+  background-color: #67d8a4 !important;
   width: 80%;
   max-width: 380px;
   position: absolute;
@@ -127,6 +138,14 @@
 }
 
 #ingredients-nav ul {
+  display: none;
+  padding: 0 12px;
+  margin: 0;
+  max-height: 60vh;
+  overflow: scroll;
+}
+
+#equipments-nav ul {
   display: none;
   padding: 0 12px;
   margin: 0;
@@ -145,7 +164,23 @@
   line-height: 1.6;
 }
 
+#equipments-nav ul li {
+  width: 99%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  color: white;
+  line-height: 1.6;
+}
+
 #ingredients-nav li:hover {
+  color: #b6babe;
+  cursor: pointer;
+}
+
+#equipments-nav li:hover {
   color: #b6babe;
   cursor: pointer;
 }
@@ -207,24 +242,26 @@ path.deleteSvg {
   }
 
   #ingredients-search,
-  #equipment-search,
+  #equipments-search,
   #ustensils-search {
     max-width: 380px;
     width: 100%;
     margin: 0 10px 0 0;
   }
 
-  #equipment-search,
+  #equipments-search,
   #ustensils-search {
     margin: 0 10px;
   }
 
-  .navs #ingredients-nav {
+  .navs #ingredients-nav,
+  .navs #equipments-nav {
     width: 400px;
     max-width: none;
     top: 45px;
   }
-  .navs #ingredients-nav ul {
+  .navs #ingredients-nav ul,
+  .navs #equipments-nav ul {
     -webkit-column-count: 2;
     -moz-column-count: 2;
     column-count: 2;
@@ -233,7 +270,7 @@ path.deleteSvg {
 
 @media only screen and (min-width: 950px) {
   #ingredients-search,
-  #equipment-search,
+  #equipments-search,
   #ustensils-search {
     width: 170px;
     margin: 0 20px 0 0;
