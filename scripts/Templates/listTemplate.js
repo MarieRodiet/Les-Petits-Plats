@@ -6,16 +6,14 @@ export default class ListTemplate {
         this._btn = btn;
         this._nav = nav;
         this._type = type;
+
         this._badges = [];
         this._currentAction = null;
         this._currentBadge = null;
-        this._badgeIsNew = true;
 
         this.$ulElement = document.createElement("ul");
-
         this.$Nav = document.querySelector(this._nav);
         this.$Btn = document.querySelector(this._btn);
-
         this.$badges = document.querySelector("#badges");
     }
 
@@ -68,17 +66,17 @@ export default class ListTemplate {
             category: event.srcElement.getAttribute("category"),
             item: event.srcElement.textContent
         };
-        console.log(this.isNewBadge(newBadge));
         if (this._badges.length === 0 || this.isNewBadge(newBadge)) {
-            console.log("I am adding it");
             let Template = new BadgeTemplate(newBadge);
             let badge = Template.getBadge();
-            badge.addEventListener("click", () => this.DeleteBadge(badge));
+            badge.addEventListener("click", () => {
+                this.DeleteBadge(badge);
+                this.updateAllBadgeData();
+            });
             this.$badges.appendChild(badge);
             this._badges.push(newBadge)
             this._currentAction = "ADD";
             this._currentBadge = newBadge;
-            this.updateAllBadgeData();
         }
         this.closeNavBar();
     }
@@ -107,7 +105,6 @@ export default class ListTemplate {
                 this._currentBadge = this._badges.splice(index, 1);
                 this._currentAction = "REMOVE";
                 index = 0;
-                this.updateAllBadgeData();
             }
         }
 

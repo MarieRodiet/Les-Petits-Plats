@@ -36,6 +36,8 @@ class App {
         this.handleIngredientInput();
         this.handleEquipmentInput();
         this.handleUstensilsInput();
+        console.log(this.$badges);
+        this.handleDeleteBadge();
     }
 
     async getData() {
@@ -175,33 +177,68 @@ class App {
         })
     }
 
-    addBadge(category, badgeInfo) {
-        //if this._allBadges === 0, add the badge
-        console.log(category);
-        let action = badgeInfo[0];
-        let currentBadge = badgeInfo[1];
-        if (action === "ADD") {
-            this._allBadges.push(currentBadge);
-        }
-
-    }
-
     handleEquipmentInput() {
         let Template = new ListTemplate(this._allAppliances, "#equipments-btn", "#equipments-nav", "equipments");
         Template.handleUlElement(this.$equipmentsBtn);
         this.$equipmentsNav.appendChild(Template.getList());
-        /*this.$equipmentsNav.addEventListener("click", () => {
+        this.$equipmentsNav.addEventListener("click", () => {
             let result = Template.updateAllBadgeData();
             console.log(result);
-            this.getCurrentBadges("equipments", result);
+            this.addBadge(result);
             console.log(this._allBadges);
-        })*/
+        })
     }
 
     handleUstensilsInput() {
         let Template = new ListTemplate(this._allUstensils, "#ustensils-btn", "#ustensils-nav", "ustensils");
         Template.handleUlElement(this.$ustensilsBtn);
         this.$ustensilsNav.appendChild(Template.getList());
+        this.$ustensilsNav.addEventListener("click", () => {
+            let result = Template.updateAllBadgeData();
+            console.log(result);
+            if (this.addBadge(result)) {
+                //find it in DOM and add an eventlistener to it to this.deleteBadge();
+            }
+
+            console.log(this._allBadges);
+        })
+    }
+
+    isNewBadge(newBadge) {
+        let isNew = true;
+        for (let badge of this._allBadges) {
+            if (badge.category === newBadge.category && badge.item === newBadge.item) {
+                isNew = false;
+            }
+        }
+        return isNew;
+    }
+
+    handleDeleteBadge() {
+        window.addEventListener("click", () => {
+            if (this.$badges.hasChildNodes()) {
+                console.log("there are badges");
+            }
+            else {
+                console.log("no badges");
+            }
+        })
+
+    }
+
+    addBadge(badgeInfo) {
+        let action = badgeInfo[0];
+        let currentBadge = badgeInfo[1];
+        if (action === "ADD" && this.isNewBadge(currentBadge)) {
+            this._allBadges.push(currentBadge);
+            let badges = this.$badges.querySelectorAll(".badgeContainer");
+            return true;
+            console.log(badges);
+        }
+        else {
+            console.log("we are not adding the badge");
+            return false;
+        }
 
     }
 

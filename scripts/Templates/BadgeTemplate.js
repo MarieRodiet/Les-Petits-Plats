@@ -17,9 +17,6 @@ export default class BadgeTemplate {
             </g>
         </span>`;
         this.$container.innerHTML = badgeCard;
-        /*this.$container.querySelector(".badge path.deleteSvg").addEventListener("click"), () => {
-            this.handleDeleteBadges();
-        }*/
         return this.$container;
 
     }
