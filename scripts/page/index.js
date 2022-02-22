@@ -10,6 +10,7 @@ class App {
         this._allAppliances = null;
         this._allIngredients = null;
         this._allUstensils = null;
+        this._allBadges = [];
 
         //DOM elements
         this.$mainInput = document.querySelector("#main-input");
@@ -21,7 +22,7 @@ class App {
         this.$ustensilsNav = document.querySelector("#ustensils-nav");
 
         this.$ingredientsBtn = document.querySelector("#ingredients-btn");
-        this.$equipmentBtn = document.querySelector("#equipments-btn");
+        this.$equipmentsBtn = document.querySelector("#equipments-btn");
         this.$ustensilsBtn = document.querySelector("#ustensils-btn");
 
 
@@ -35,7 +36,6 @@ class App {
         this.handleIngredientInput();
         this.handleEquipmentInput();
         this.handleUstensilsInput();
-        this.getAllBadges();
     }
 
     async getData() {
@@ -167,38 +167,100 @@ class App {
         let Template = new ListTemplate(this._allIngredients, "#ingredients-btn", "#ingredients-nav", "ingredients");
         Template.handleUlElement();
         this.$ingredientsNav.appendChild(Template.getList());
+        this.$ingredientsNav.addEventListener("click", () => {
+            let result = Template.updateAllBadgeData();
+            console.log(result);
+            this.addBadge("ingredients", result);
+            console.log(this._allBadges);
+        })
+    }
+
+    addBadge(category, badgeInfo) {
+        //if this._allBadges === 0, add the badge
+        console.log(category);
+        let action = badgeInfo[0];
+        let currentBadge = badgeInfo[1];
+        if (action === "ADD") {
+            this._allBadges.push(currentBadge);
+        }
+
     }
 
     handleEquipmentInput() {
         let Template = new ListTemplate(this._allAppliances, "#equipments-btn", "#equipments-nav", "equipments");
-        Template.handleUlElement(this.$equipmentBtn);
+        Template.handleUlElement(this.$equipmentsBtn);
         this.$equipmentsNav.appendChild(Template.getList());
+        /*this.$equipmentsNav.addEventListener("click", () => {
+            let result = Template.updateAllBadgeData();
+            console.log(result);
+            this.getCurrentBadges("equipments", result);
+            console.log(this._allBadges);
+        })*/
     }
 
     handleUstensilsInput() {
         let Template = new ListTemplate(this._allUstensils, "#ustensils-btn", "#ustensils-nav", "ustensils");
         Template.handleUlElement(this.$ustensilsBtn);
         this.$ustensilsNav.appendChild(Template.getList());
+
     }
 
-    getAllBadges() {
-        let badges = this.$badges.querySelectorAll(".badgeContainer span");
-        /*
-        this._allData.filter((element) => {
-            if (regex.test(element.name.toLowerCase())) {
-                filtered.push(element);
-            }
-            else if (regex.test(element.description.toLowerCase())) {
-                filtered.push(element);
-            }
-            else if (this.findIngredient(element.ingredients, regex)) {
-                filtered.push(element);
-            }
-            this.renderRecipes(filtered);
 
-        });*/
-        console.log(badges);
+    //let filtered = [];
+    //this._allBadges.push()
+    //loop through allBadges
+    /*
+            if (this._allBadges.length === 0) {
+            this._allBadges.push(badge);
+        }
+        else {
+            //if this._allBadges contains the badge, remove it
+            //if this._allBadges does not contain the badge, add it
+            for (let b of this._allBadges) {
+                if (b.category === category && b.item === badge.item) {
+                    console.log("let's remove it since we already have it");
+                }
+                else if (b !== badge) {
+                    console.log("let's add it since we can't find it");
+                    this._allBadges.push(badge);
+                }
+            }
+        }
+        
+        if (this._allBadges.length === 0) {
+        this._allBadges.push(badge);
+        console.log("we add a badge when this._allBadges is empty and action is ADD. RESULT: ");
+        console.log(this._allBadges);
     }
+    else {
+        console.log("this._allBadges is not empty");
+    }
+    for (let badge of this._allBadges) {
+        if (badge === undefined) {
+            this._allBadges.push(badge);
+            console.log("you are adding the first badge");
+        }
+        else if (badge.category === category) {
+            console.log("there is already a badge and here it's his category")
+        }
+    }*/
+
+    //let badges = this.$badges.querySelectorAll(".badgeContainer .badge");
+    /*
+    this._allData.filter((element) => {
+        if (regex.test(element.name.toLowerCase())) {
+            filtered.push(element);
+        }
+        else if (regex.test(element.description.toLowerCase())) {
+            filtered.push(element);
+        }
+        else if (this.findIngredient(element.ingredients, regex)) {
+            filtered.push(element);
+        }
+        this.renderRecipes(filtered);
+
+    });*/
+
 
 }
 

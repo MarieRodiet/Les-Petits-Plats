@@ -7,6 +7,9 @@ export default class ListTemplate {
         this._nav = nav;
         this._type = type;
         this._badges = [];
+        this._currentAction = null;
+        this._currentBadge = null;
+        this._badgeIsNew = true;
 
         this.$ulElement = document.createElement("ul");
 
@@ -65,13 +68,29 @@ export default class ListTemplate {
             category: event.srcElement.getAttribute("category"),
             item: event.srcElement.textContent
         };
-        let Template = new BadgeTemplate(newBadge);
-        let badge = Template.getBadge();
-        badge.addEventListener("click", () => this.DeleteBadge(badge));
-        this.$badges.appendChild(badge);
-        this._badges.push(newBadge)
+        console.log(this.isNewBadge(newBadge));
+        if (this._badges.length === 0 || this.isNewBadge(newBadge)) {
+            console.log("I am adding it");
+            let Template = new BadgeTemplate(newBadge);
+            let badge = Template.getBadge();
+            badge.addEventListener("click", () => this.DeleteBadge(badge));
+            this.$badges.appendChild(badge);
+            this._badges.push(newBadge)
+            this._currentAction = "ADD";
+            this._currentBadge = newBadge;
+            this.updateAllBadgeData();
+        }
         this.closeNavBar();
-        console.log(this._badges);
+    }
+
+    isNewBadge(newBadge) {
+        let isNew = true;
+        for (let badge of this._badges) {
+            if (badge.category === newBadge.category && badge.item === newBadge.item) {
+                isNew = false;
+            }
+        }
+        return isNew;
     }
 
     DeleteBadge(badge) {
@@ -81,21 +100,22 @@ export default class ListTemplate {
             item: spanInBadge.getAttribute("item")
         };
         badge.innerHTML = "";
-        console.log(toBeDeleted);
         let index = -1;
-        let removed = "";
         for (let badge of this._badges) {
             index++;
             if (badge.category === toBeDeleted.category && badge.item === toBeDeleted.item) {
-                console.log(badge);
-                console.log(index);
-                removed = this._badges.splice(index, 1);
+                this._currentBadge = this._badges.splice(index, 1);
+                this._currentAction = "REMOVE";
                 index = 0;
-                removed = "";
+                this.updateAllBadgeData();
             }
         }
-        console.log(removed);
-        console.log(this._badges);
+
+
+    }
+
+    updateAllBadgeData() {
+        return [this._currentAction, this._currentBadge];
     }
 
 
