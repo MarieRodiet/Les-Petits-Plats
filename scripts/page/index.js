@@ -1,6 +1,7 @@
 import ListTemplate from "../Templates/listTemplate.js";
 import RecipeTemplate from "../Templates/RecipeTemplate.js";
 import Api from "./../api/api.js";
+import BadgeTemplate from "../Templates/BadgeTemplate.js";
 
 class App {
     constructor() {
@@ -36,8 +37,6 @@ class App {
         this.handleIngredientInput();
         this.handleEquipmentInput();
         this.handleUstensilsInput();
-        console.log(this.$badges);
-        this.handleDeleteBadge();
     }
 
     async getData() {
@@ -47,6 +46,10 @@ class App {
         this._allAppliances = this.getDataChunk("appliance", true);
         this._allUstensils = this.getUstensils();
         this._allIngredients = this.getIngredients();
+
+        console.log(this._allAppliances);
+        console.log(this._allIngredients);
+        console.log(this._allUstensils);
     }
 
     getDataChunk(type, isDouble) {
@@ -131,23 +134,56 @@ class App {
                 let input = event.target.value;
                 let filtered = [];
                 if (input.length >= 3 || input.length > 0 && event.key === "Backspace") {
+                    this.$badges.innerHTML = "";
                     const regex = new RegExp(input);
                     this._allData.filter((element) => {
                         if (regex.test(element.name.toLowerCase())) {
                             filtered.push(element);
+                            console.log(element.name);
                         }
                         else if (regex.test(element.description.toLowerCase())) {
                             filtered.push(element);
+                            console.log(element.description);
                         }
                         else if (this.findIngredient(element.ingredients, regex)) {
                             filtered.push(element);
+                            console.log("among ingredients");
                         }
                         this.renderRecipes(filtered);
+                        this._allIngredients = filtered.filter((element, index) => {
+                            return filtered.indexOf(element) === index;
+                        })
+                        console.log(this._allAppliances);
+                        console.log(this._allIngredients);
+                        console.log(this._allUstensils);
+
+                        this._allAppliances = filtered.forElement((element) => {
+                            return element.appliance;
+                        })
+                        this._allUstensils = filtered.forElement((element) => {
+                            return element.ustensils.flat();
+                        })
                     });
                 }
+                if (input.length >= 3 && filtered.length === 0) {
+                    this.$badges.innerHTML = "";
+                    this.getErrorMessage();
+                    filtered = this._allData;
+                    this.renderRecipes(filtered);
+                }
+
             })
         })
     }
+
+
+    getErrorMessage() {
+        const box = document.createElement("div");
+        box.className = "noResultMessage alert alert-warning";
+        box.innerHTML = `Aucune recherche ne correspond à votre critère ...  Vous pouvez chercher «tarte aux pommes», «poisson» etc ...`;
+        this.$badges.appendChild(box);
+    }
+
 
     //returns true ingredient matches the regex
     findIngredient(ingredientsArray, regex) {
@@ -165,43 +201,83 @@ class App {
     }
 
     handleIngredientInput() {
-        //create dropdown, and its functionality
         let Template = new ListTemplate(this._allIngredients, "#ingredients-btn", "#ingredients-nav", "ingredients");
-        Template.handleUlElement();
         this.$ingredientsNav.appendChild(Template.getList());
-        this.$ingredientsNav.addEventListener("click", () => {
-            let result = Template.updateAllBadgeData();
-            console.log(result);
-            this.addBadge("ingredients", result);
-            console.log(this._allBadges);
-        })
+        this.handleUlElement(this.$ingredientsBtn, this.$ingredientsNav);
+        this.handleListClick(this.$ingredientsBtn, this.$ingredientsNav);
     }
 
     handleEquipmentInput() {
         let Template = new ListTemplate(this._allAppliances, "#equipments-btn", "#equipments-nav", "equipments");
-        Template.handleUlElement(this.$equipmentsBtn);
         this.$equipmentsNav.appendChild(Template.getList());
-        this.$equipmentsNav.addEventListener("click", () => {
-            let result = Template.updateAllBadgeData();
-            console.log(result);
-            this.addBadge(result);
-            console.log(this._allBadges);
-        })
+        this.handleUlElement(this.$equipmentsBtn, this.$equipmentsNav);
+        this.handleListClick(this.$equipmentsBtn, this.$equipmentsNav);
     }
 
     handleUstensilsInput() {
         let Template = new ListTemplate(this._allUstensils, "#ustensils-btn", "#ustensils-nav", "ustensils");
-        Template.handleUlElement(this.$ustensilsBtn);
         this.$ustensilsNav.appendChild(Template.getList());
-        this.$ustensilsNav.addEventListener("click", () => {
-            let result = Template.updateAllBadgeData();
-            console.log(result);
-            if (this.addBadge(result)) {
-                //find it in DOM and add an eventlistener to it to this.deleteBadge();
-            }
+        this.handleUlElement(this.$ustensilsBtn, this.$ustensilsNav);
+        this.handleListClick(this.$ustensilsBtn, this.$ustensilsNav);
+    }
 
-            console.log(this._allBadges);
+    handleUlElement(btn, nav) {
+        btn.addEventListener("click", () => {
+            this.toggleNavBar(btn, nav);
         })
+    }
+
+    toggleNavBar(btn, nav) {
+        let $ulElement = nav.querySelector(" ul");
+        if (!$ulElement.getAttribute('style') || $ulElement.getAttribute('style') === 'display: none;') {
+            $ulElement.style.display = "block";
+            btn.querySelector("svg").classList.add("up");
+            btn.querySelector("svg").classList.remove("down");
+            $ulElement.setAttribute("aria-expanded", "true");
+        }
+        else {
+            this.closeNavBar(btn, nav);
+        }
+    }
+
+    handleListClick(btn, nav) {
+        let $ulElement = nav.querySelector("ul");
+        let liElements = $ulElement.querySelectorAll("li");
+        for (const li of liElements) {
+            li.addEventListener("click", () => this.handleAddBadge(btn, nav));
+        }
+    }
+
+    closeNavBar(btn, nav) {
+        let $ulElement = nav.querySelector("ul");
+        $ulElement.style.display = "none";
+        btn.querySelector("svg").classList.add("down");
+        btn.querySelector("svg").classList.remove("up");
+        $ulElement.setAttribute("aria-expanded", "false");
+    }
+
+    handleAddBadge(btn, nav) {
+        let newBadge = {
+            category: event.srcElement.getAttribute("category"),
+            item: event.srcElement.textContent
+        }
+        if (this._allBadges.length === 0 || this.isNewBadge(newBadge)) {
+            let Template = new BadgeTemplate(newBadge);
+            let badge = Template.getBadge();
+            badge.addEventListener("click", () => {
+                this.DeleteBadge(badge);
+            });
+            this.$badges.appendChild(badge);
+            this._allBadges.push(newBadge)
+
+            console.log("just pushed a new badge to this._allBadges: ")
+            console.log(this._allBadges);
+            this.filterRecipes();
+        }
+        else {
+            console.log("you already have this item");
+        }
+        this.closeNavBar(btn, nav)
     }
 
     isNewBadge(newBadge) {
@@ -214,90 +290,22 @@ class App {
         return isNew;
     }
 
-    handleDeleteBadge() {
-        window.addEventListener("click", () => {
-            if (this.$badges.hasChildNodes()) {
-                console.log("there are badges");
-            }
-            else {
-                console.log("no badges");
-            }
-        })
-
-    }
-
-    addBadge(badgeInfo) {
-        let action = badgeInfo[0];
-        let currentBadge = badgeInfo[1];
-        if (action === "ADD" && this.isNewBadge(currentBadge)) {
-            this._allBadges.push(currentBadge);
-            let badges = this.$badges.querySelectorAll(".badgeContainer");
-            return true;
-            console.log(badges);
-        }
-        else {
-            console.log("we are not adding the badge");
-            return false;
-        }
-
-    }
-
-
-    //let filtered = [];
-    //this._allBadges.push()
-    //loop through allBadges
-    /*
-            if (this._allBadges.length === 0) {
-            this._allBadges.push(badge);
-        }
-        else {
-            //if this._allBadges contains the badge, remove it
-            //if this._allBadges does not contain the badge, add it
-            for (let b of this._allBadges) {
-                if (b.category === category && b.item === badge.item) {
-                    console.log("let's remove it since we already have it");
-                }
-                else if (b !== badge) {
-                    console.log("let's add it since we can't find it");
-                    this._allBadges.push(badge);
-                }
+    DeleteBadge(badge) {
+        let spanInBadge = badge.querySelector(".badge");
+        let toBeDeleted = {
+            category: spanInBadge.getAttribute("category"),
+            item: spanInBadge.getAttribute("item")
+        };
+        badge.innerHTML = "";
+        let index = -1;
+        for (let badge of this._allBadges) {
+            index++;
+            if (badge.category === toBeDeleted.category && badge.item === toBeDeleted.item) {
+                this._allBadges.splice(index, 1);
+                index = 0;
             }
         }
-        
-        if (this._allBadges.length === 0) {
-        this._allBadges.push(badge);
-        console.log("we add a badge when this._allBadges is empty and action is ADD. RESULT: ");
-        console.log(this._allBadges);
     }
-    else {
-        console.log("this._allBadges is not empty");
-    }
-    for (let badge of this._allBadges) {
-        if (badge === undefined) {
-            this._allBadges.push(badge);
-            console.log("you are adding the first badge");
-        }
-        else if (badge.category === category) {
-            console.log("there is already a badge and here it's his category")
-        }
-    }*/
-
-    //let badges = this.$badges.querySelectorAll(".badgeContainer .badge");
-    /*
-    this._allData.filter((element) => {
-        if (regex.test(element.name.toLowerCase())) {
-            filtered.push(element);
-        }
-        else if (regex.test(element.description.toLowerCase())) {
-            filtered.push(element);
-        }
-        else if (this.findIngredient(element.ingredients, regex)) {
-            filtered.push(element);
-        }
-        this.renderRecipes(filtered);
-
-    });*/
-
 
 }
 

@@ -75,6 +75,10 @@
   color: white;
 }
 
+#secondary-search-section input:focus::placeholder {
+  color: transparent;
+}
+
 .s-search-btn {
   width: 30%;
   border: none;
@@ -127,6 +131,7 @@
   z-index: 3;
   top: 43px;
   left: 1px;
+  border-radius: 5px;
 }
 
 #equipments-nav {
@@ -187,6 +192,16 @@
   color: white;
 }
 
+#badges .ingredients {
+  background-color: #0d6efc;
+}
+#badges .equipments {
+  background-color: #ec6354;
+}
+#badges .ustensils {
+  background-color: #67d8a4;
+}
+
 #badges span svg {
   width: 18px;
   height: 18px;
@@ -196,8 +211,14 @@
   margin: 0 2px 0 4px;
 }
 
-path.deleteSvg {
+path.ingredients {
   fill: #0d6efc;
+}
+path.equipments {
+  fill: #ec6354;
+}
+path.ustensils {
+  fill: #67d8a4;
 }
 
 #badges span:hover > svg path.deleteSvg {
