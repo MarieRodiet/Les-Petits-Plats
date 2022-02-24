@@ -22,11 +22,13 @@ class App {
         this.$equipmentsNav = document.querySelector("#equipments-nav");
         this.$ustensilsNav = document.querySelector("#ustensils-nav");
 
+        this.$ingredientsInput = document.querySelector("#input-ingredients");
+        this.$equipmentsInput = document.querySelector("#input-equipments");
+        this.$ustensilsInput = document.querySelector("#input-ustensils");
+
         this.$ingredientsBtn = document.querySelector("#ingredients-btn");
         this.$equipmentsBtn = document.querySelector("#equipments-btn");
         this.$ustensilsBtn = document.querySelector("#ustensils-btn");
-
-
     }
 
     async init() {
@@ -205,6 +207,23 @@ class App {
         this.$ingredientsNav.appendChild(Template.getList());
         this.handleUlElement(this.$ingredientsBtn, this.$ingredientsNav);
         this.handleListClick(this.$ingredientsBtn, this.$ingredientsNav);
+        this.$ingredientsInput.addEventListener("keyup", () => {
+            let input = event.target.value;
+            console.log(input);
+            let filtered = [];
+            const regex = new RegExp(input.toLowerCase());
+            this._allIngredients.filter((element) => {
+                if (regex.test(element.toLowerCase())) {
+                    filtered.push(element);
+                    console.log(element);
+                }
+            })
+            console.log("filtered");
+            console.log(filtered);
+            this.$ingredientsNav.innerHTML = "";
+            let Template = new ListTemplate(this._allIngredients, "#ingredients-btn", "#ingredients-nav", "ingredients");
+            this.$ingredientsNav.appendChild(Template.getList());
+        })
     }
 
     handleEquipmentInput() {
@@ -229,14 +248,53 @@ class App {
 
     toggleNavBar(btn, nav) {
         let $ulElement = nav.querySelector(" ul");
+        let input = btn.previousElementSibling;
+        let type = input.getAttribute("id");
         if (!$ulElement.getAttribute('style') || $ulElement.getAttribute('style') === 'display: none;') {
             $ulElement.style.display = "block";
             btn.querySelector("svg").classList.add("up");
             btn.querySelector("svg").classList.remove("down");
+            btn.classList.add("buttonBottomRadiusRemoval");
             $ulElement.setAttribute("aria-expanded", "true");
+            input.focus();
+            input.placeholder = "Rechercher des " + this.getPlaceHolder(type);
+            input.classList.add("inputBottomRadiusRemoval");
+            let parent = input.parentNode;
+            parent.classList.add("inputAndButtonExtended");
+            let nav = parent.nextElementSibling;
+            nav.classList.add("navExtended");
+            let list = nav.childNodes[1];
+            list.classList.add("listExtended");
         }
         else {
-            this.closeNavBar(btn, nav);
+            this.closeNavBar(btn, nav, input);
+        }
+    }
+
+    closeNavBar(btn, nav, input) {
+        let type = input.getAttribute("id");
+        let $ulElement = nav.querySelector("ul");
+        $ulElement.style.display = "none";
+        btn.querySelector("svg").classList.add("down");
+        btn.querySelector("svg").classList.remove("up");
+        $ulElement.setAttribute("aria-expanded", "false");
+        input.placeholder = this.getPlaceHolder(type)[0].toUpperCase() + this.getPlaceHolder(type).slice(1);
+        input.classList.remove("inputBottomRadiusRemoval");
+        let parent = input.parentNode;
+        parent.classList.remove("inputAndButtonExtended");
+        btn.classList.remove("buttonBottomRadiusRemoval");
+        nav.classList.remove("navExtended");
+
+    }
+
+    getPlaceHolder(id) {
+        switch (id) {
+            case "input-ingredients":
+                return "ingrédients";
+            case "input-equipments":
+                return "appareils";
+            case "input-ustensils":
+                return "ustensiles";
         }
     }
 
@@ -248,13 +306,7 @@ class App {
         }
     }
 
-    closeNavBar(btn, nav) {
-        let $ulElement = nav.querySelector("ul");
-        $ulElement.style.display = "none";
-        btn.querySelector("svg").classList.add("down");
-        btn.querySelector("svg").classList.remove("up");
-        $ulElement.setAttribute("aria-expanded", "false");
-    }
+
 
     handleAddBadge(btn, nav) {
         let newBadge = {
@@ -272,7 +324,7 @@ class App {
 
             console.log("just pushed a new badge to this._allBadges: ")
             console.log(this._allBadges);
-            this.filterRecipes();
+            //this.filterRecipes();
         }
         else {
             console.log("you already have this item");
