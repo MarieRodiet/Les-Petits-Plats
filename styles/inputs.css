@@ -5,7 +5,7 @@
   width: 80%;
   margin: 10px auto;
   height: 55px;
-  max-width: 380px;
+  max-width: 580px;
 }
 
 #main-input {
@@ -57,15 +57,16 @@
 #secondary-search-section .input-group {
   width: 80%;
   min-width: 200px;
-  margin: 5px 10%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 3px auto;
 }
 
 .inputAndButton {
   display: flex;
   width: 60%;
+  max-width: 380px;
 }
 
 .inputAndButtonExtended {
@@ -152,7 +153,7 @@
   width: 100%;
   position: absolute;
   z-index: 3;
-  top: 40px;
+  top: 50px;
   border-radius: 5px;
 }
 
@@ -221,10 +222,10 @@
   background-color: #0d6efc;
 }
 #badges .equipments {
-  background-color: #ec6354;
+  background-color: #67d8a4;
 }
 #badges .ustensils {
-  background-color: #67d8a4;
+  background-color: #ec6354;
 }
 
 #badges span svg {
@@ -240,10 +241,10 @@ path.ingredients {
   fill: #0d6efc;
 }
 path.equipments {
-  fill: #ec6354;
+  fill: #67d8a4;
 }
 path.ustensils {
-  fill: #67d8a4;
+  fill: #ec6354;
 }
 
 #badges span:hover > svg path.deleteSvg {
@@ -256,33 +257,66 @@ path.ustensils {
 }
 
 /* BIG TABLET VERSION */
-
 @media only screen and (min-width: 800px) {
+  #main-search-section {
+    width: 75%;
+    max-width: none;
+  }
+}
+
+@media only screen and (min-width: 950px) {
+  #main-search-section {
+    width: 75%;
+    max-width: none;
+  }
+
   #secondary-search-section {
     display: flex;
     flex-direction: row;
-    padding: 0 10%;
+    flex-wrap: wrap;
+    flex-wrap: wrap;
+    width: 75%;
+    margin: 0 auto;
+    justify-content: start;
   }
 
   #secondary-search-section .input-group {
-    width: 180px;
-    margin: 5px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: start;
+    min-width: none;
+    max-width: none;
+    width: fit-content;
+    margin: 0px;
   }
 
   .inputAndButton {
-    width: 160px;
-  }
-
-  .inputAndButtonExtended {
-    max-width: none;
-    width: 200px;
+    width: 140px;
+    margin: 10px 0;
   }
 
   .inputAndButton input {
-    width: 160px;
+    width: inherit;
+  }
+
+  .s-search-btn {
+    width: inherit;
+  }
+
+  /*input-group*/
+
+  /*inputAndButton*/
+  .inputAndButtonExtended {
+    max-width: none;
+    width: 400px;
+    margin-right: 10px;
+  }
+
+  .inputBottomRadiusRemoval {
+    width: 350px;
+  }
+  .buttonBottomRadiusRemoval {
+    width: 50px;
   }
 
   .navs {
@@ -295,76 +329,28 @@ path.ustensils {
 
   .navExtended {
     width: 100%;
-    max-width: 450px;
+    max-width: 400px;
     left: 1px;
+    column-count: 2;
+    column-width: 100px;
   }
 }
 
-/*
-@media only screen and (min-width: 800px) {
-  #secondary-search-section {
-    display: grid;
-    grid-template-columns: repeat(9, 1fr);
-  }
-
-  #ingredients-search {
-    grid-column-start: 4;
-    grid-column-end: 5;
-  }
-  #equipments-search {
-    grid-column-start: 5;
-    grid-column-end: 6;
-  }
-  #ustensils-search {
-    grid-column-start: 6;
-    grid-column-end: 7;
-  }
-
-  .changeGrid {
-    grid-column: 1/2;
-  }
-
-  #secondary-search-section .input-group {
-    width: 100%;
-    margin: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .inputAndButton {
-    width: 160px;
-  }
-
-  .inputAndButtonExtended {
-    max-width: none;
-    width: 200px;
-  }
-
-  .inputAndButton input {
-    width: 160px;
-  }
-
-  .navs {
-    width: 100%;
-    min-width: 200px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .navExtended {
-    width: 100%;
-    max-width: 450px;
-    left: 1px;
-  }
+/*.navs nav ul {
+  display: none;
+  padding: 0 12px;
+  margin: 0;
+  max-height: 60vh;
+  overflow: scroll;
 }
 
-
-in index.js: 
-
-let navParent = nav.parentNode;
-navParent.classList.add("changeGrid");
-let navParent = nav.parentNode;
-navParent.classList.remove("changeGrid");
-*/
+.navs nav ul li {
+  width: 99%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  color: white;
+  line-height: 1.6;
+}*/

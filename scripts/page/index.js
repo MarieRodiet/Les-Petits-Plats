@@ -6,8 +6,7 @@ import BadgeTemplate from "../Templates/BadgeTemplate.js";
 class App {
     constructor() {
         //private data variables
-        this._allData = null;
-        this._allRecipeNames = null;
+        this._allRecipes = null;
         this._allAppliances = null;
         this._allIngredients = null;
         this._allUstensils = null;
@@ -21,67 +20,59 @@ class App {
         this.$ingredientsNav = document.querySelector("#ingredients-nav");
         this.$equipmentsNav = document.querySelector("#equipments-nav");
         this.$ustensilsNav = document.querySelector("#ustensils-nav");
+        this.$AllNavs = [this.$ingredientsNav, this.$equipmentsNav, this.$ustensilsNav];
 
         this.$ingredientsInput = document.querySelector("#input-ingredients");
         this.$equipmentsInput = document.querySelector("#input-equipments");
         this.$ustensilsInput = document.querySelector("#input-ustensils");
+        this.$AllInputs = [this.$ingredientsInput, this.$equipmentsInput, this.$ustensilsInput];
 
         this.$ingredientsBtn = document.querySelector("#ingredients-btn");
         this.$equipmentsBtn = document.querySelector("#equipments-btn");
         this.$ustensilsBtn = document.querySelector("#ustensils-btn");
+        this.$AllBtns = [this.$ingredientsBtn, this.$equipmentsBtn, this.$ustensilsBtn];
+
     }
 
     async init() {
         await this.getData().then(() => {
-            this.renderRecipes(this._allData);
+            this.renderRecipes(this._allRecipes);
         })
         this.handleMainInput();
-        this.handleIngredientInput();
-        this.handleEquipmentInput();
-        this.handleUstensilsInput();
+        this.handleIngredientInput(this._allIngredients);
+        this.handleEquipmentInput(this._allAppliances);
+        this.handleUstensilsInput(this._allUstensils);
     }
 
     async getData() {
         const API = new Api("data/recipes.json");
-        this._allData = await API.getJsonData();
-        this._allRecipeNames = this.getDataChunk("name", false);
-        this._allAppliances = this.getDataChunk("appliance", true);
-        this._allUstensils = this.getUstensils();
-        this._allIngredients = this.getIngredients();
-
-        console.log(this._allAppliances);
-        console.log(this._allIngredients);
-        console.log(this._allUstensils);
+        this._allRecipes = await API.getJsonData();
+        this._allAppliances = this.getAppliances(this._allRecipes);
+        this._allUstensils = this.getUstensils(this._allRecipes);
+        this._allIngredients = this.getIngredients(this._allRecipes);
     }
 
-    getDataChunk(type, isDouble) {
-        //creer regex avec les caracteres differents
-        let result = this._allData.map(element => element[type]);
-        if (isDouble) {
-            let unique = result.filter((c, index) => {
-                return result.indexOf(c) === index;
-            })
-            result = unique;
-        }
-        return this.sortAlphabetically(result);
-    }
 
-    getUstensils() {
-        const ustensilsArray = this.getDataChunk("ustensils", true).flat()
-        let ustensils = ustensilsArray.map(element =>
-            element[0].toUpperCase() + element.slice(1).toLowerCase());
-        let unique = ustensils.filter((element, index) => {
-            return ustensils.indexOf(element) === index;
-        })
+    getUstensils(allRecipes) {
+        let ustensilsArrays = allRecipes.map(element => element["ustensils"]);
+        let ustensils = ustensilsArrays.flat().map(element => this.getItCapitalized(element));
+        let unique = this.removeDoubleFromArray(ustensils);
         return this.sortAlphabetically(unique);
     }
 
-    getIngredients() {
-        const ingredientsArray = this.getDataChunk("ingredients", false);
+    getAppliances(allRecipes) {
+        let result = allRecipes.map(element => element["appliance"]);
+        let unique = this.removeDoubleFromArray(result);
+        result = unique;
+        return this.sortAlphabetically(result);
+    }
+
+    getIngredients(allRecipes) {
+        const ingredientsArray = allRecipes.map(element => element["ingredients"]);
         let ingredients = [];
         ingredientsArray.map(element =>
             element.forEach(val => {
-                ingredients.push(val.ingredient[0].toUpperCase() + val.ingredient.slice(1).toLowerCase())
+                ingredients.push(this.getItCapitalized(val.ingredient))
             }
             ));
         let unique = ingredients.filter((element, index) => {
@@ -103,10 +94,15 @@ class App {
                     return ingredients.indexOf(element) === index;
                 }
             }
-            //ingredients that finish
+            //remove double for the rest
             return ingredients.indexOf(element) === index;
         });
         return this.sortAlphabetically(unique);
+    }
+
+
+    getItCapitalized(element) {
+        return element[0].toUpperCase() + element.slice(1).toLowerCase();
     }
 
     sortAlphabetically(array) {
@@ -121,6 +117,13 @@ class App {
         });
     }
 
+    removeDoubleFromArray(array) {
+        let unique = array.filter((element, index) => {
+            return array.indexOf(element) === index;
+        })
+        return unique;
+    }
+
     renderRecipes(recipes) {
         this.$recipeContainer.innerHTML = "";
         recipes.forEach(element => {
@@ -129,51 +132,53 @@ class App {
         });
     }
 
+
     handleMainInput() {
-        let events = ["keyup", "change", "Backspace"];
+        let events = ["focus", "keyup", "change", "Backspace"];
         events.forEach((element) => {
             this.$mainInput.addEventListener(element, (event) => {
-                let input = event.target.value;
+                let input = event.target.value.toLowerCase();
                 let filtered = [];
                 if (input.length >= 3 || input.length > 0 && event.key === "Backspace") {
                     this.$badges.innerHTML = "";
                     const regex = new RegExp(input);
-                    this._allData.filter((element) => {
+                    this._allRecipes.forEach((element) => {
                         if (regex.test(element.name.toLowerCase())) {
                             filtered.push(element);
-                            console.log(element.name);
                         }
                         else if (regex.test(element.description.toLowerCase())) {
                             filtered.push(element);
-                            console.log(element.description);
                         }
                         else if (this.findIngredient(element.ingredients, regex)) {
                             filtered.push(element);
-                            console.log("among ingredients");
                         }
+                        let filteredIngredients = this.getIngredients(filtered);
+                        let filteredEquipments = filtered.map(element => element.appliance);
+                        let filteredEquipmentsSingles = this.removeDoubleFromArray(filteredEquipments.flat())
+                        let filteredUstensils = this.getUstensils(filtered);
+                        this.handleIngredientInput(filteredIngredients);
+                        this.handleEquipmentInput(filteredEquipmentsSingles);
+                        this.handleUstensilsInput(filteredUstensils);
                         this.renderRecipes(filtered);
-                        this._allIngredients = filtered.filter((element, index) => {
-                            return filtered.indexOf(element) === index;
-                        })
-                        console.log(this._allAppliances);
-                        console.log(this._allIngredients);
-                        console.log(this._allUstensils);
 
-                        this._allAppliances = filtered.forElement((element) => {
-                            return element.appliance;
-                        })
-                        this._allUstensils = filtered.forElement((element) => {
-                            return element.ustensils.flat();
-                        })
                     });
                 }
                 if (input.length >= 3 && filtered.length === 0) {
                     this.$badges.innerHTML = "";
                     this.getErrorMessage();
-                    filtered = this._allData;
+                    filtered = this._allRecipes;
                     this.renderRecipes(filtered);
                 }
-
+                let index = 0;
+                this.$AllNavs.forEach(nav => {
+                    let ulElement = nav.querySelector(" ul");
+                    if (ulElement.ariaExpanded === "true") {
+                        let btn = this.$AllBtns[index];
+                        let input = this.$AllInputs[index];
+                        this.closeNavBar(btn, nav, input);
+                    }
+                    index++;
+                })
             })
         })
     }
@@ -185,7 +190,6 @@ class App {
         box.innerHTML = `Aucune recherche ne correspond à votre critère ...  Vous pouvez chercher «tarte aux pommes», «poisson» etc ...`;
         this.$badges.appendChild(box);
     }
-
 
     //returns true ingredient matches the regex
     findIngredient(ingredientsArray, regex) {
@@ -202,12 +206,13 @@ class App {
         return isFound;
     }
 
-    handleIngredientInput() {
-        let Template = new ListTemplate(this._allIngredients, "#ingredients-btn", "#ingredients-nav", "ingredients");
+    handleIngredientInput(list) {
+        this.$ingredientsNav.innerHTML = "";
+        let Template = new ListTemplate(list, "#ingredients-btn", "#ingredients-nav", "ingredients");
         this.$ingredientsNav.appendChild(Template.getList());
-        this.handleUlElement(this.$ingredientsBtn, this.$ingredientsNav);
-        this.handleListClick(this.$ingredientsBtn, this.$ingredientsNav);
-        this.$ingredientsInput.addEventListener("keyup", () => {
+        this.handleUlElement(this.$ingredientsBtn, this.$ingredientsNav, this.$ingredientsInput);
+        this.handleListClick(this.$ingredientsBtn, this.$ingredientsNav, this.$ingredientsInput);
+        /*this.$ingredientsInput.addEventListener("keyup", () => {
             let input = event.target.value;
             console.log(input);
             let filtered = [];
@@ -223,26 +228,28 @@ class App {
             this.$ingredientsNav.innerHTML = "";
             let Template = new ListTemplate(this._allIngredients, "#ingredients-btn", "#ingredients-nav", "ingredients");
             this.$ingredientsNav.appendChild(Template.getList());
-        })
+        })*/
     }
 
-    handleEquipmentInput() {
-        let Template = new ListTemplate(this._allAppliances, "#equipments-btn", "#equipments-nav", "equipments");
+    handleEquipmentInput(list) {
+        this.$equipmentsNav.innerHTML = "";
+        let Template = new ListTemplate(list, "#equipments-btn", "#equipments-nav", "equipments");
         this.$equipmentsNav.appendChild(Template.getList());
-        this.handleUlElement(this.$equipmentsBtn, this.$equipmentsNav);
-        this.handleListClick(this.$equipmentsBtn, this.$equipmentsNav);
+        this.handleUlElement(this.$equipmentsBtn, this.$equipmentsNav, this.$equipmentsInput);
+        this.handleListClick(this.$equipmentsBtn, this.$equipmentsNav, this.$equipmentsInput);
     }
 
-    handleUstensilsInput() {
-        let Template = new ListTemplate(this._allUstensils, "#ustensils-btn", "#ustensils-nav", "ustensils");
+    handleUstensilsInput(list) {
+        this.$ustensilsNav.innerHTML = "";
+        let Template = new ListTemplate(list, "#ustensils-btn", "#ustensils-nav", "ustensils");
         this.$ustensilsNav.appendChild(Template.getList());
-        this.handleUlElement(this.$ustensilsBtn, this.$ustensilsNav);
-        this.handleListClick(this.$ustensilsBtn, this.$ustensilsNav);
+        this.handleUlElement(this.$ustensilsBtn, this.$ustensilsNav, this.$ustensilsInput);
+        this.handleListClick(this.$ustensilsBtn, this.$ustensilsNav, this.$ustensilsInput);
     }
 
-    handleUlElement(btn, nav) {
+    handleUlElement(btn, nav, input) {
         btn.addEventListener("click", () => {
-            this.toggleNavBar(btn, nav);
+            this.toggleNavBar(btn, nav, input);
         })
     }
 
@@ -265,6 +272,8 @@ class App {
             nav.classList.add("navExtended");
             let list = nav.childNodes[1];
             list.classList.add("listExtended");
+            let navParent = nav.parentNode;
+            navParent.classList.add("extendParent");
         }
         else {
             this.closeNavBar(btn, nav, input);
@@ -272,6 +281,10 @@ class App {
     }
 
     closeNavBar(btn, nav, input) {
+        //input is undefined when a <li> is added
+        console.log(btn);
+        console.log(nav);
+        console.log(input);
         let type = input.getAttribute("id");
         let $ulElement = nav.querySelector("ul");
         $ulElement.style.display = "none";
@@ -284,6 +297,8 @@ class App {
         parent.classList.remove("inputAndButtonExtended");
         btn.classList.remove("buttonBottomRadiusRemoval");
         nav.classList.remove("navExtended");
+        let navParent = nav.parentNode;
+        navParent.classList.remove("extendParent");
 
     }
 
@@ -298,17 +313,15 @@ class App {
         }
     }
 
-    handleListClick(btn, nav) {
+    handleListClick(btn, nav, input) {
         let $ulElement = nav.querySelector("ul");
         let liElements = $ulElement.querySelectorAll("li");
         for (const li of liElements) {
-            li.addEventListener("click", () => this.handleAddBadge(btn, nav));
+            li.addEventListener("click", () => this.handleAddBadge(btn, nav, input));
         }
     }
 
-
-
-    handleAddBadge(btn, nav) {
+    handleAddBadge(btn, nav, input) {
         let newBadge = {
             category: event.srcElement.getAttribute("category"),
             item: event.srcElement.textContent
@@ -326,10 +339,7 @@ class App {
             console.log(this._allBadges);
             //this.filterRecipes();
         }
-        else {
-            console.log("you already have this item");
-        }
-        this.closeNavBar(btn, nav)
+        this.closeNavBar(btn, nav, input)
     }
 
     isNewBadge(newBadge) {
