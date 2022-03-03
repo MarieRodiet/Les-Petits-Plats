@@ -132,6 +132,12 @@ class App {
         });
     }
 
+    filterRecipes() {/*
+        badge = {
+            category: "ustensils",
+            item: "Couteaux de cuisine"
+        } */
+    }
 
     handleMainInput() {
         let events = ["focus", "keyup", "change", "Backspace"];
@@ -281,10 +287,6 @@ class App {
     }
 
     closeNavBar(btn, nav, input) {
-        //input is undefined when a <li> is added
-        console.log(btn);
-        console.log(nav);
-        console.log(input);
         let type = input.getAttribute("id");
         let $ulElement = nav.querySelector("ul");
         $ulElement.style.display = "none";
@@ -337,7 +339,7 @@ class App {
 
             console.log("just pushed a new badge to this._allBadges: ")
             console.log(this._allBadges);
-            //this.filterRecipes();
+            this.filterRecipes();
         }
         this.closeNavBar(btn, nav, input)
     }

@@ -160,6 +160,7 @@
 .navExtended {
   width: 100%;
   max-width: 350px;
+  max-height: 400px;
 }
 
 .listExtended {
@@ -331,26 +332,27 @@ path.ustensils {
     width: 100%;
     max-width: 400px;
     left: 1px;
+  }
+
+  .listExtended ul {
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
     column-count: 2;
-    column-width: 100px;
   }
 }
 
-/*.navs nav ul {
-  display: none;
-  padding: 0 12px;
-  margin: 0;
-  max-height: 60vh;
-  overflow: scroll;
-}
+@media only screen and (min-width: 1500px) {
+  .inputAndButtonExtended {
+    width: 670px;
+  }
 
-.navs nav ul li {
-  width: 99%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  color: white;
-  line-height: 1.6;
-}*/
+  .navExtended {
+    max-width: 670px;
+  }
+
+  .listExtended ul {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+  }
+}
