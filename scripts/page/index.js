@@ -132,11 +132,47 @@ class App {
         });
     }
 
-    filterRecipes() {/*
+    filterRecipes() {
+        /*
         badge = {
             category: "ustensils",
             item: "Couteaux de cuisine"
         } */
+        let filtered = [];
+        let countIngredients = 0;
+        let countEquipments = 0;
+        let countUstensils = 0;
+        this._allBadges.forEach(badge => {
+            this._allRecipes.map(recipe => {
+                console.log(badge.category);
+                console.log(recipe);
+                if (badge.category === "ingredients") {
+                    if (this.findIngredient(recipe[badge.category], badge.item)) {
+                        filtered.push(recipe);
+                        countIngredients++;
+                    }
+                }
+                else if (badge.category === "equipments") {
+                    filtered.push(recipe);
+                    countEquipments++;
+                }
+                else if (badge.category === "ustensils") {
+                    for (let ustensils of recipe[badge.category]) {
+                        if (badge.item === ustensils) {
+                            filtered.push(recipe);
+                            countUstensils++;
+                        }
+                    }
+                }
+
+            })
+        })
+        //PROBLEM OF ADDING DUPLICATE RECIPES
+        console.log(countIngredients);
+        console.log(countEquipments);
+        console.log(countUstensils);
+        console.log("total");
+        console.log(filtered.length);
     }
 
     handleMainInput() {
@@ -198,14 +234,11 @@ class App {
     }
 
     //returns true ingredient matches the regex
-    findIngredient(ingredientsArray, regex) {
+    findIngredient(ingredientsArray, search) {
         let isFound = false;
-        let ingredientsNames = [];
-        for (let i = 0; i < ingredientsArray.length; i++) {
-            ingredientsNames.push(ingredientsArray[i].ingredient.toLowerCase());
-        }
-        for (let i = 0; i < ingredientsNames.length; i++) {
-            if (regex.test(ingredientsNames[i])) {
+        let ingredientsNames = ingredientsArray.map(r => r.ingredient);
+        for (let ingredient of ingredientsNames) {
+            if (ingredient.includes(search)) {
                 isFound = true;
             }
         }
