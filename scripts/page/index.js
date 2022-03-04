@@ -133,46 +133,30 @@ class App {
     }
 
     filterRecipes() {
-        /*
-        badge = {
-            category: "ustensils",
-            item: "Couteaux de cuisine"
-        } */
         let filtered = [];
-        let countIngredients = 0;
-        let countEquipments = 0;
-        let countUstensils = 0;
         this._allBadges.forEach(badge => {
             this._allRecipes.map(recipe => {
-                console.log(badge.category);
-                console.log(recipe);
                 if (badge.category === "ingredients") {
                     if (this.findIngredient(recipe[badge.category], badge.item)) {
                         filtered.push(recipe);
-                        countIngredients++;
                     }
                 }
-                else if (badge.category === "equipments") {
-                    filtered.push(recipe);
-                    countEquipments++;
+                if (badge.category === "equipments") {
+                    if (recipe["appliance"] === badge.item) {
+                        filtered.push(recipe);
+                    }
                 }
-                else if (badge.category === "ustensils") {
+                if (badge.category === "ustensils") {
                     for (let ustensils of recipe[badge.category]) {
                         if (badge.item === ustensils) {
                             filtered.push(recipe);
-                            countUstensils++;
                         }
                     }
                 }
 
             })
         })
-        //PROBLEM OF ADDING DUPLICATE RECIPES
-        console.log(countIngredients);
-        console.log(countEquipments);
-        console.log(countUstensils);
-        console.log("total");
-        console.log(filtered.length);
+        this.renderRecipes(this.removeDoubleFromArray(filtered));
     }
 
     handleMainInput() {
@@ -247,32 +231,31 @@ class App {
 
     handleIngredientInput(list) {
         this.$ingredientsNav.innerHTML = "";
-        let Template = new ListTemplate(list, "#ingredients-btn", "#ingredients-nav", "ingredients");
+        let Template = new ListTemplate(list, "ingredients");
         this.$ingredientsNav.appendChild(Template.getList());
         this.handleUlElement(this.$ingredientsBtn, this.$ingredientsNav, this.$ingredientsInput);
         this.handleListClick(this.$ingredientsBtn, this.$ingredientsNav, this.$ingredientsInput);
-        /*this.$ingredientsInput.addEventListener("keyup", () => {
+        this.$ingredientsInput.addEventListener("keyup", () => {
+            //OPEN NAV
+            //this.toggleNavBar(this.$ingredientsBtn, this.$ingredientsNav, this.$ingredientsInput);
             let input = event.target.value;
-            console.log(input);
+            //console.log(input);
             let filtered = [];
             const regex = new RegExp(input.toLowerCase());
-            this._allIngredients.filter((element) => {
+            this._allIngredients.forEach((element) => {
                 if (regex.test(element.toLowerCase())) {
                     filtered.push(element);
-                    console.log(element);
+                    //console.log(element);
                 }
             })
-            console.log("filtered");
-            console.log(filtered);
-            this.$ingredientsNav.innerHTML = "";
-            let Template = new ListTemplate(this._allIngredients, "#ingredients-btn", "#ingredients-nav", "ingredients");
-            this.$ingredientsNav.appendChild(Template.getList());
-        })*/
+            //console.log("filtered");
+            //console.log(filtered);
+        })
     }
 
     handleEquipmentInput(list) {
         this.$equipmentsNav.innerHTML = "";
-        let Template = new ListTemplate(list, "#equipments-btn", "#equipments-nav", "equipments");
+        let Template = new ListTemplate(list, "equipments");
         this.$equipmentsNav.appendChild(Template.getList());
         this.handleUlElement(this.$equipmentsBtn, this.$equipmentsNav, this.$equipmentsInput);
         this.handleListClick(this.$equipmentsBtn, this.$equipmentsNav, this.$equipmentsInput);
@@ -280,7 +263,7 @@ class App {
 
     handleUstensilsInput(list) {
         this.$ustensilsNav.innerHTML = "";
-        let Template = new ListTemplate(list, "#ustensils-btn", "#ustensils-nav", "ustensils");
+        let Template = new ListTemplate(list, "ustensils");
         this.$ustensilsNav.appendChild(Template.getList());
         this.handleUlElement(this.$ustensilsBtn, this.$ustensilsNav, this.$ustensilsInput);
         this.handleListClick(this.$ustensilsBtn, this.$ustensilsNav, this.$ustensilsInput);
@@ -288,8 +271,13 @@ class App {
 
     handleUlElement(btn, nav, input) {
         btn.addEventListener("click", () => {
-            this.toggleNavBar(btn, nav, input);
+            this.toggleNavBar(btn, nav);
         })
+        input.addEventListener("change", () => {
+            console.log("something is entered");
+            this.toggleNavBar(btn, nav);
+        })
+
     }
 
     toggleNavBar(btn, nav) {
@@ -334,7 +322,6 @@ class App {
         nav.classList.remove("navExtended");
         let navParent = nav.parentNode;
         navParent.classList.remove("extendParent");
-
     }
 
     getPlaceHolder(id) {
@@ -369,9 +356,6 @@ class App {
             });
             this.$badges.appendChild(badge);
             this._allBadges.push(newBadge)
-
-            console.log("just pushed a new badge to this._allBadges: ")
-            console.log(this._allBadges);
             this.filterRecipes();
         }
         this.closeNavBar(btn, nav, input)
@@ -400,6 +384,7 @@ class App {
             if (badge.category === toBeDeleted.category && badge.item === toBeDeleted.item) {
                 this._allBadges.splice(index, 1);
                 index = 0;
+                this._allBadges.length === 0 ? this.renderRecipes(this._allRecipes) : this.filterRecipes();
             }
         }
     }

@@ -1,12 +1,8 @@
 export default class ListTemplate {
-    constructor(list, btn, nav, type) {
+    constructor(list, type) {
         this._list = list;
-        this._btn = btn;
-        this._nav = nav;
         this._type = type;
 
-        this.$Nav = document.querySelector(this._nav);
-        this.$Btn = document.querySelector(this._btn);
     }
 
     getList() {
