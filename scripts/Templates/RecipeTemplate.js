@@ -50,7 +50,7 @@ export default class RecipeTemplate {
         <li class="item">
             <span class="name fw-bold">${element.ingredient}</span>
             :
-            <span class="quantity">${element.quantity}${element.unit}</span>
+            <span class="quantity">${element.quantity} ${element.unit}</span>
         </li>`
             : (element.quantity) ? `
         <li class="item">

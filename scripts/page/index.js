@@ -31,7 +31,6 @@ class App {
         this.$equipmentsBtn = document.querySelector("#equipments-btn");
         this.$ustensilsBtn = document.querySelector("#ustensils-btn");
         this.$AllBtns = [this.$ingredientsBtn, this.$equipmentsBtn, this.$ustensilsBtn];
-
     }
 
     async init() {
@@ -39,9 +38,9 @@ class App {
             this.renderRecipes(this._allRecipes);
         })
         this.handleMainInput();
-        this.handleIngredientInput(this._allIngredients);
-        this.handleEquipmentInput(this._allAppliances);
-        this.handleUstensilsInput(this._allUstensils);
+        this.handleIngredientInput();
+        this.handleEquipmentInput();
+        this.handleUstensilsInput();
     }
 
     async getData() {
@@ -175,7 +174,7 @@ class App {
                         else if (regex.test(element.description.toLowerCase())) {
                             filtered.push(element);
                         }
-                        else if (this.findIngredient(element.ingredients, regex)) {
+                        else if (this.findIngredient(element.ingredients, input)) {
                             filtered.push(element);
                         }
                         let filteredIngredients = this.getIngredients(filtered);
@@ -209,6 +208,27 @@ class App {
         })
     }
 
+    handleIngredientInput() {
+        let listTemplate = new ListTemplate(this._allIngredients, "ingredients", this.$ingredientsBtn, this.$ingredientsNav, this.$ingredientsInput);
+        listTemplate.getList(this._allIngredients);
+        listTemplate.handleInput();
+        this.handleListClick(this.$ingredientsNav.firstChild, listTemplate)
+    }
+
+    handleEquipmentInput() {
+        let listTemplate = new ListTemplate(this._allAppliances, "equipments", this.$equipmentsBtn, this.$equipmentsNav, this.$equipmentsInput);
+        listTemplate.getList(this._allAppliances);
+        listTemplate.handleInput();
+        this.handleListClick(this.$equipmentsNav.firstChild, listTemplate);
+    }
+
+    handleUstensilsInput() {
+        let listTemplate = new ListTemplate(this._allUstensils, "ustensils", this.$ustensilsBtn, this.$ustensilsNav, this.$ustensilsInput);
+        listTemplate.getList(this._allUstensils);
+        listTemplate.handleInput();
+        this.handleListClick(this.$ustensilsNav.firstChild, listTemplate);
+    }
+
 
     getErrorMessage() {
         const box = document.createElement("div");
@@ -229,137 +249,7 @@ class App {
         return isFound;
     }
 
-    handleIngredientInput(list) {
-        this.$ingredientsNav.innerHTML = "";
-        let Template = new ListTemplate(list, "ingredients");
-        this.$ingredientsNav.appendChild(Template.getList());
-        this.handleUlElement(this.$ingredientsBtn, this.$ingredientsNav, this.$ingredientsInput);
-        this.handleListClick(this.$ingredientsBtn, this.$ingredientsNav, this.$ingredientsInput);
-        this.$ingredientsInput.addEventListener("keyup", () => {
-            //OPEN NAV
-            //this.toggleNavBar(this.$ingredientsBtn, this.$ingredientsNav, this.$ingredientsInput);
-            let input = event.target.value;
-            //console.log(input);
-            let filtered = [];
-            const regex = new RegExp(input.toLowerCase());
-            this._allIngredients.forEach((element) => {
-                if (regex.test(element.toLowerCase())) {
-                    filtered.push(element);
-                    //console.log(element);
-                }
-            })
-            //console.log("filtered");
-            //console.log(filtered);
-        })
-    }
 
-    handleEquipmentInput(list) {
-        this.$equipmentsNav.innerHTML = "";
-        let Template = new ListTemplate(list, "equipments");
-        this.$equipmentsNav.appendChild(Template.getList());
-        this.handleUlElement(this.$equipmentsBtn, this.$equipmentsNav, this.$equipmentsInput);
-        this.handleListClick(this.$equipmentsBtn, this.$equipmentsNav, this.$equipmentsInput);
-    }
-
-    handleUstensilsInput(list) {
-        this.$ustensilsNav.innerHTML = "";
-        let Template = new ListTemplate(list, "ustensils");
-        this.$ustensilsNav.appendChild(Template.getList());
-        this.handleUlElement(this.$ustensilsBtn, this.$ustensilsNav, this.$ustensilsInput);
-        this.handleListClick(this.$ustensilsBtn, this.$ustensilsNav, this.$ustensilsInput);
-    }
-
-    handleUlElement(btn, nav, input) {
-        btn.addEventListener("click", () => {
-            this.toggleNavBar(btn, nav);
-        })
-        input.addEventListener("change", () => {
-            console.log("something is entered");
-            this.toggleNavBar(btn, nav);
-        })
-
-    }
-
-    toggleNavBar(btn, nav) {
-        let $ulElement = nav.querySelector(" ul");
-        let input = btn.previousElementSibling;
-        let type = input.getAttribute("id");
-        if (!$ulElement.getAttribute('style') || $ulElement.getAttribute('style') === 'display: none;') {
-            $ulElement.style.display = "block";
-            btn.querySelector("svg").classList.add("up");
-            btn.querySelector("svg").classList.remove("down");
-            btn.classList.add("buttonBottomRadiusRemoval");
-            $ulElement.setAttribute("aria-expanded", "true");
-            input.focus();
-            input.placeholder = "Rechercher des " + this.getPlaceHolder(type);
-            input.classList.add("inputBottomRadiusRemoval");
-            let parent = input.parentNode;
-            parent.classList.add("inputAndButtonExtended");
-            let nav = parent.nextElementSibling;
-            nav.classList.add("navExtended");
-            let list = nav.childNodes[1];
-            list.classList.add("listExtended");
-            let navParent = nav.parentNode;
-            navParent.classList.add("extendParent");
-        }
-        else {
-            this.closeNavBar(btn, nav, input);
-        }
-    }
-
-    closeNavBar(btn, nav, input) {
-        let type = input.getAttribute("id");
-        let $ulElement = nav.querySelector("ul");
-        $ulElement.style.display = "none";
-        btn.querySelector("svg").classList.add("down");
-        btn.querySelector("svg").classList.remove("up");
-        $ulElement.setAttribute("aria-expanded", "false");
-        input.placeholder = this.getPlaceHolder(type)[0].toUpperCase() + this.getPlaceHolder(type).slice(1);
-        input.classList.remove("inputBottomRadiusRemoval");
-        let parent = input.parentNode;
-        parent.classList.remove("inputAndButtonExtended");
-        btn.classList.remove("buttonBottomRadiusRemoval");
-        nav.classList.remove("navExtended");
-        let navParent = nav.parentNode;
-        navParent.classList.remove("extendParent");
-    }
-
-    getPlaceHolder(id) {
-        switch (id) {
-            case "input-ingredients":
-                return "ingrédients";
-            case "input-equipments":
-                return "appareils";
-            case "input-ustensils":
-                return "ustensiles";
-        }
-    }
-
-    handleListClick(btn, nav, input) {
-        let $ulElement = nav.querySelector("ul");
-        let liElements = $ulElement.querySelectorAll("li");
-        for (const li of liElements) {
-            li.addEventListener("click", () => this.handleAddBadge(btn, nav, input));
-        }
-    }
-
-    handleAddBadge(btn, nav, input) {
-        let newBadge = {
-            category: event.srcElement.getAttribute("category"),
-            item: event.srcElement.textContent
-        }
-        if (this._allBadges.length === 0 || this.isNewBadge(newBadge)) {
-            let Template = new BadgeTemplate(newBadge);
-            let badge = Template.getBadge();
-            badge.addEventListener("click", () => {
-                this.DeleteBadge(badge);
-            });
-            this.$badges.appendChild(badge);
-            this._allBadges.push(newBadge)
-            this.filterRecipes();
-        }
-        this.closeNavBar(btn, nav, input)
-    }
 
     isNewBadge(newBadge) {
         let isNew = true;
@@ -388,6 +278,40 @@ class App {
             }
         }
     }
+
+    createBadge(data) {
+        return {
+            category: data.getAttribute("category"),
+            item: data.textContent
+        }
+    }
+
+    handleAddBadge(newBadge, listTemplate) {
+        if (this._allBadges.length === 0 || this.isNewBadge(newBadge)) {
+            let badgeTemplate = new BadgeTemplate(newBadge);
+            let badge = badgeTemplate.getBadge();
+            badge.addEventListener("click", () => {
+                this.DeleteBadge(badge);
+            });
+            this.$badges.appendChild(badge);
+            this._allBadges.push(newBadge)
+            this.filterRecipes();
+        }
+        listTemplate.closeNavBar()
+    }
+
+    handleListClick(ul, listTemplate) {
+        let liElements = ul.querySelectorAll("li");
+        for (const li of liElements) {
+            li.addEventListener("click", (event) => {
+                listTemplate.closeNavBar();
+                let badge = this.createBadge(event.srcElement);
+                this.handleAddBadge(badge, listTemplate)
+            }
+            );
+        }
+    }
+
 
 }
 
