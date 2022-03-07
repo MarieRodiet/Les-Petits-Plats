@@ -195,23 +195,28 @@ class App {
                         let filteredEquipments = filtered.map(element => element.appliance);
                         let filteredEquipmentsSingles = this.removeDoubleFromArray(filteredEquipments.flat())
                         let filteredUstensils = this.getUstensils(filtered);
-                        this.handleIngredientInput(filteredIngredients);
-                        this.handleEquipmentInput(filteredEquipmentsSingles);
-                        this.handleUstensilsInput(filteredUstensils);
+                        this._allIngredients = filteredIngredients;
+                        this._allAppliances = filteredEquipmentsSingles;
+                        this._allUstensils = filteredUstensils;
+                        this.handleIngredientInput();
+                        this.handleEquipmentInput();
+                        this.handleUstensilsInput();
                         this.renderRecipes(filtered);
                     });
                 }
                 if (input.length >= 3 && filtered.length === 0) {
                     this.$badges.innerHTML = "";
                     this.getErrorMessage();
-                    filtered = this._allRecipes;
-                    this.renderRecipes(filtered);
+                    this.renderRecipes(this._allRecipes);
+                    this._allAppliances = this.getAppliances(this._allRecipes);
+                    this._allUstensils = this.getUstensils(this._allRecipes);
+                    this._allIngredients = this.getIngredients(this._allRecipes);
                 }
             })
         })
     }
 
-        //fonctionnalités du champ de recherche INGREDIENTS
+    //fonctionnalités du champ de recherche INGREDIENTS
     handleIngredientInput() {
         let listTemplate = new ListTemplate(this._allIngredients, "ingredients", this.$ingredientsBtn, this.$ingredientsNav, this.$ingredientsInput);
         listTemplate.getList(this._allIngredients);

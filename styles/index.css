@@ -6,6 +6,18 @@
   box-sizing: border-box;
 }
 
+.src-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  clip-path: content-box;
+  white-space: nowrap;
+  border: 0;
+}
+
 body {
   width: 100%;
   position: relative;
@@ -23,7 +35,8 @@ header {
 }
 
 .noResultMessage {
-  width: 60%;
+  width: 100%;
+  max-width: 450px;
   height: fit-content;
   padding: 10px 0;
 }
@@ -44,6 +57,15 @@ header {
   display: flex;
   flex-direction: column;
   padding: 10px 0;
+  cursor: pointer;
+}
+
+.recipe-box:hover {
+  transform: scale(1.02);
+}
+
+.recipe-box:hover > .recipe-picture {
+  background-color: #997474;
 }
 
 .recipe-picture {

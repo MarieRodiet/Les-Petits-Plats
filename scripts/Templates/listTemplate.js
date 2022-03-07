@@ -11,16 +11,26 @@ export default class ListTemplate {
     }
 
     handleCloseNavBar(mainInput) {
+        let events = ["click", "keyup"];
         mainInput.addEventListener("focus", () => {
             if (this.$ulElement.getAttribute('style') === 'display: block;') {
                 this.closeNavBar();
             }
         })
-        this._btn.addEventListener("keyup", (event) => {
-            if (event.key === "Enter") {
-                this.toggleNavBar();
+        events.forEach(element => {
+            this._btn.addEventListener(element, (event) => {
+                if (event.key === "Enter" || event.type === "click") {
+                    this.toggleNavBar();
+                }
+            })
+        })
+
+        this._input.addEventListener("keyup", (event) => {
+            if (this.$ulElement.getAttribute('style') === 'display: block;' && event.key === "Escape") {
+                this.closeNavBar();
             }
         })
+
     }
 
     getList(items) {
