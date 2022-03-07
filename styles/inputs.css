@@ -85,6 +85,11 @@
 .inputAndButton:focus {
   outline: none;
 }
+
+.inputAndButton button:focus {
+  outline-style: solid;
+}
+
 .inputAndButton input {
   width: 75%;
   outline: none;
@@ -200,6 +205,12 @@
   cursor: pointer;
 }
 
+.navs nav ul li:focus {
+  outline: none;
+  font-size: large;
+  color: #b6babe;
+}
+
 /*BADGES*/
 #badges {
   display: flex;
@@ -218,6 +229,10 @@
   font-weight: 400;
   cursor: pointer;
   color: white;
+}
+
+#badges span:focus {
+  transform: scale(1.1);
 }
 
 #badges .ingredients {

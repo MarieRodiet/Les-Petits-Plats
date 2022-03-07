@@ -5,34 +5,43 @@ import BadgeTemplate from "../Templates/BadgeTemplate.js";
 
 class App {
     constructor() {
-        //private data variables
+        //variables stockant les données triées et formatées du ficher JSON
         this._allRecipes = null;
         this._allAppliances = null;
         this._allIngredients = null;
         this._allUstensils = null;
-        this._allBadges = [];
 
-        //DOM elements
+        //variables modifiables, au service de l'utilisateur 
+        this._allBadges = [];
+        this._closeNavBar = false;
+        this._navToBeClosed = null;
+
+        //DOM element: champ de recherche principal
         this.$mainInput = document.querySelector("#main-input");
-        this.$recipeContainer = document.querySelector("#recipes-container");
+
+        //DOM element: badges
         this.$badges = document.querySelector("#badges");
 
+        //DOM element: les NAVS
         this.$ingredientsNav = document.querySelector("#ingredients-nav");
         this.$equipmentsNav = document.querySelector("#equipments-nav");
         this.$ustensilsNav = document.querySelector("#ustensils-nav");
-        this.$AllNavs = [this.$ingredientsNav, this.$equipmentsNav, this.$ustensilsNav];
 
+        //DOM element: les INPUTS
         this.$ingredientsInput = document.querySelector("#input-ingredients");
         this.$equipmentsInput = document.querySelector("#input-equipments");
         this.$ustensilsInput = document.querySelector("#input-ustensils");
-        this.$AllInputs = [this.$ingredientsInput, this.$equipmentsInput, this.$ustensilsInput];
 
+        //DOM element: les BTNS
         this.$ingredientsBtn = document.querySelector("#ingredients-btn");
         this.$equipmentsBtn = document.querySelector("#equipments-btn");
         this.$ustensilsBtn = document.querySelector("#ustensils-btn");
-        this.$AllBtns = [this.$ingredientsBtn, this.$equipmentsBtn, this.$ustensilsBtn];
+
+        //DOM element: recettes
+        this.$recipeContainer = document.querySelector("#recipes-container");
     }
 
+    //let app = new App(); app.init();
     async init() {
         await this.getData().then(() => {
             this.renderRecipes(this._allRecipes);
@@ -41,8 +50,10 @@ class App {
         this.handleIngredientInput();
         this.handleEquipmentInput();
         this.handleUstensilsInput();
+
     }
 
+    //instancier toutes les variables
     async getData() {
         const API = new Api("data/recipes.json");
         this._allRecipes = await API.getJsonData();
@@ -51,7 +62,7 @@ class App {
         this._allIngredients = this.getIngredients(this._allRecipes);
     }
 
-
+    //obtenir les ustensils
     getUstensils(allRecipes) {
         let ustensilsArrays = allRecipes.map(element => element["ustensils"]);
         let ustensils = ustensilsArrays.flat().map(element => this.getItCapitalized(element));
@@ -59,6 +70,7 @@ class App {
         return this.sortAlphabetically(unique);
     }
 
+    //obtenir les appareils
     getAppliances(allRecipes) {
         let result = allRecipes.map(element => element["appliance"]);
         let unique = this.removeDoubleFromArray(result);
@@ -66,6 +78,7 @@ class App {
         return this.sortAlphabetically(result);
     }
 
+    //obtenir les ingredients
     getIngredients(allRecipes) {
         const ingredientsArray = allRecipes.map(element => element["ingredients"]);
         let ingredients = [];
@@ -99,7 +112,6 @@ class App {
         return this.sortAlphabetically(unique);
     }
 
-
     getItCapitalized(element) {
         return element[0].toUpperCase() + element.slice(1).toLowerCase();
     }
@@ -123,6 +135,7 @@ class App {
         return unique;
     }
 
+    //insertion des recettes dans le DOM
     renderRecipes(recipes) {
         this.$recipeContainer.innerHTML = "";
         recipes.forEach(element => {
@@ -131,6 +144,7 @@ class App {
         });
     }
 
+    //filtrer les recettes selon les badges
     filterRecipes() {
         let filtered = [];
         this._allBadges.forEach(badge => {
@@ -152,12 +166,12 @@ class App {
                         }
                     }
                 }
-
             })
         })
         this.renderRecipes(this.removeDoubleFromArray(filtered));
     }
 
+    //fonctionnalités du champ de recherche principal
     handleMainInput() {
         let events = ["focus", "keyup", "change", "Backspace"];
         events.forEach((element) => {
@@ -185,7 +199,6 @@ class App {
                         this.handleEquipmentInput(filteredEquipmentsSingles);
                         this.handleUstensilsInput(filteredUstensils);
                         this.renderRecipes(filtered);
-
                     });
                 }
                 if (input.length >= 3 && filtered.length === 0) {
@@ -194,41 +207,65 @@ class App {
                     filtered = this._allRecipes;
                     this.renderRecipes(filtered);
                 }
-                let index = 0;
-                this.$AllNavs.forEach(nav => {
-                    let ulElement = nav.querySelector(" ul");
-                    if (ulElement.ariaExpanded === "true") {
-                        let btn = this.$AllBtns[index];
-                        let input = this.$AllInputs[index];
-                        this.closeNavBar(btn, nav, input);
-                    }
-                    index++;
-                })
             })
         })
     }
 
+        //fonctionnalités du champ de recherche INGREDIENTS
     handleIngredientInput() {
         let listTemplate = new ListTemplate(this._allIngredients, "ingredients", this.$ingredientsBtn, this.$ingredientsNav, this.$ingredientsInput);
         listTemplate.getList(this._allIngredients);
-        listTemplate.handleInput();
+        this.handleInput(this.$ingredientsNav.firstChild, this.$ingredientsInput, listTemplate);
         this.handleListClick(this.$ingredientsNav.firstChild, listTemplate)
-    }
+        listTemplate.handleCloseNavBar(this.$mainInput);
 
+    }
+    //fonctionnalités du champ de recherche APPAREILS
     handleEquipmentInput() {
         let listTemplate = new ListTemplate(this._allAppliances, "equipments", this.$equipmentsBtn, this.$equipmentsNav, this.$equipmentsInput);
         listTemplate.getList(this._allAppliances);
-        listTemplate.handleInput();
+        this.handleInput(this.$equipmentsNav.firstChild, this.$equipmentsInput, listTemplate);
         this.handleListClick(this.$equipmentsNav.firstChild, listTemplate);
+        listTemplate.handleCloseNavBar(this.$mainInput);
     }
-
+    //fonctionnalités du champ de recherche USTENSILS
     handleUstensilsInput() {
         let listTemplate = new ListTemplate(this._allUstensils, "ustensils", this.$ustensilsBtn, this.$ustensilsNav, this.$ustensilsInput);
         listTemplate.getList(this._allUstensils);
-        listTemplate.handleInput();
+        this.handleInput(this.$ustensilsNav.firstChild, this.$ustensilsInput, listTemplate);
         this.handleListClick(this.$ustensilsNav.firstChild, listTemplate);
+        listTemplate.handleCloseNavBar(this.$mainInput);
     }
 
+    //saisie dans input permet de modifier la liste du NAV UL
+    handleInput(ul, input, listTemplate) {
+        input.addEventListener("keyup", (event) => {
+            listTemplate.getUpdatedList(event);
+            this.handleListClick(ul, listTemplate)
+        })
+    }
+
+    //fonctionnalités des elements LI pour ajouter un badge et fermer le NAV UL
+    handleListClick(ul, listTemplate) {
+        let events = ["click", "keyup"];
+        let liElements = ul.querySelectorAll("li");
+        for (const li of liElements) {
+            events.forEach(eventListener => {
+                li.addEventListener(eventListener, (event) => {
+                    console.log(event);
+                    if (event.key === "Enter" || event.type === "click") {
+                        listTemplate.closeNavBar();
+                        let badge = this.createBadge(event.srcElement);
+                        this.handleAddBadge(badge, listTemplate)
+                    }
+                    if (event.key === "Escape") {
+                        listTemplate.closeNavBar();
+                    }
+                }
+                );
+            })
+        }
+    }
 
     getErrorMessage() {
         const box = document.createElement("div");
@@ -237,7 +274,7 @@ class App {
         this.$badges.appendChild(box);
     }
 
-    //returns true ingredient matches the regex
+    //valeur de retour TRUE si le tableau contient le SEARCH param
     findIngredient(ingredientsArray, search) {
         let isFound = false;
         let ingredientsNames = ingredientsArray.map(r => r.ingredient);
@@ -286,12 +323,16 @@ class App {
         }
     }
 
+    //creation d'un nouveau badge
     handleAddBadge(newBadge, listTemplate) {
+        let events = ["click", "keypress"];
         if (this._allBadges.length === 0 || this.isNewBadge(newBadge)) {
             let badgeTemplate = new BadgeTemplate(newBadge);
             let badge = badgeTemplate.getBadge();
-            badge.addEventListener("click", () => {
-                this.DeleteBadge(badge);
+            events.forEach(eventListener => {
+                badge.addEventListener(eventListener, () => {
+                    this.DeleteBadge(badge);
+                })
             });
             this.$badges.appendChild(badge);
             this._allBadges.push(newBadge)
@@ -299,21 +340,7 @@ class App {
         }
         listTemplate.closeNavBar()
     }
-
-    handleListClick(ul, listTemplate) {
-        let liElements = ul.querySelectorAll("li");
-        for (const li of liElements) {
-            li.addEventListener("click", (event) => {
-                listTemplate.closeNavBar();
-                let badge = this.createBadge(event.srcElement);
-                this.handleAddBadge(badge, listTemplate)
-            }
-            );
-        }
-    }
-
-
 }
 
-const app = new App();
+let app = new App();
 app.init();

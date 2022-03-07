@@ -10,6 +10,19 @@ export default class ListTemplate {
         this.$ulElement = document.createElement("ul");
     }
 
+    handleCloseNavBar(mainInput) {
+        mainInput.addEventListener("focus", () => {
+            if (this.$ulElement.getAttribute('style') === 'display: block;') {
+                this.closeNavBar();
+            }
+        })
+        this._btn.addEventListener("keyup", (event) => {
+            if (event.key === "Enter") {
+                this.toggleNavBar();
+            }
+        })
+    }
+
     getList(items) {
         this._nav.innerHTML = "";
         this.$ulElement.className = "scroll";
@@ -23,19 +36,6 @@ export default class ListTemplate {
         })
         this.$ulElement.innerHTML = list;
         this._nav.appendChild(this.$ulElement);
-        this.handleButton();
-    }
-
-    handleButton() {
-        this._btn.addEventListener("click", () => {
-            this.toggleNavBar();
-        })
-    }
-
-    handleInput() {
-        this._input.addEventListener("keyup", (event) => {
-            this.getUpdatedList(event);
-        })
     }
 
     getUpdatedList(event) {
@@ -46,7 +46,6 @@ export default class ListTemplate {
                 filtered.push(element);
             }
         })
-        console.log(filtered);
         this.openNavBar();
         this.getList(filtered);
     }
@@ -68,7 +67,6 @@ export default class ListTemplate {
         this._input.placeholder = "Rechercher des " + this.getPlaceHolder().toLowerCase();
         this._input.classList.add("inputBottomRadiusRemoval");
         this._inputParent.classList.add("inputAndButtonExtended");
-
         this._navParent.classList.add("navExtended");
         this._nav.classList.add("listExtended");
         this.$ulElement.style.display = "block";
@@ -82,7 +80,6 @@ export default class ListTemplate {
         this._input.placeholder = this.getPlaceHolder();
         this._input.classList.remove("inputBottomRadiusRemoval");
         this._inputParent.classList.remove("inputAndButtonExtended");
-
         this.$ulElement.setAttribute("aria-expanded", "false");
         this.$ulElement.style.display = "none";
         this._nav.classList.remove("navExtended");
