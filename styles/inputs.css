@@ -166,7 +166,6 @@
 .navExtended {
   width: 100%;
   max-width: 350px;
-  max-height: 400px;
 }
 
 .listExtended {
@@ -183,9 +182,10 @@
 
 .navs nav ul {
   display: none;
-  padding: 0 12px;
+  padding: 0 0 5px 12px;
   margin: 0;
-  max-height: 60vh;
+  height: fit-content;
+  max-height: 400px;
   overflow: scroll;
 }
 
@@ -347,6 +347,10 @@ path.ustensils {
     max-width: 400px;
   }
 
+  .navs nav ul {
+    max-height: 250px;
+  }
+
   .listExtended ul {
     -webkit-column-count: 2;
     -moz-column-count: 2;
@@ -367,5 +371,6 @@ path.ustensils {
     -webkit-column-count: 3;
     -moz-column-count: 3;
     column-count: 3;
+    max-height: 250px;
   }
 }
