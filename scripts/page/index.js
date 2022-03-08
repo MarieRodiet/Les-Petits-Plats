@@ -174,25 +174,28 @@ class App {
     //fonctionnalités du champ de recherche principal
     handleMainInput() {
         let events = ["focus", "keyup", "change", "Backspace"];
-        events.forEach((element) => {
-            this.$mainInput.addEventListener(element, (event) => {
+        for (let i = 0; i < events.length; i++) {
+            this.$mainInput.addEventListener(events[i], (event) => {
                 let input = event.target.value.toLowerCase();
                 let filtered = [];
                 if (input.length >= 3 || input.length > 0 && event.key === "Backspace") {
                     this.$badges.innerHTML = "";
                     const regex = new RegExp(input);
-                    this._allRecipes.forEach((element) => {
-                        if (regex.test(element.name.toLowerCase())) {
-                            filtered.push(element);
+                    for (let j = 0; j < this._allRecipes.length; j++) {
+                        if (regex.test(this._allRecipes[j].name.toLowerCase())) {
+                            filtered.push(this._allRecipes[j]);
                         }
-                        else if (regex.test(element.description.toLowerCase())) {
-                            filtered.push(element);
+                        else if (regex.test(this._allRecipes[j].description.toLowerCase())) {
+                            filtered.push(this._allRecipes[j]);
                         }
-                        else if (this.findIngredient(element.ingredients, input)) {
-                            filtered.push(element);
+                        else if (this.findIngredient(this._allRecipes[j].ingredients, input)) {
+                            filtered.push(this._allRecipes[j]);
                         }
                         let filteredIngredients = this.getIngredients(filtered);
-                        let filteredEquipments = filtered.map(element => element.appliance);
+                        let filteredEquipments = [];
+                        for (let d = 0; d < filtered.length; d++) {
+                            filteredEquipments.push(filtered[d].appliance);
+                        }
                         let filteredEquipmentsSingles = this.removeDoubleFromArray(filteredEquipments.flat())
                         let filteredUstensils = this.getUstensils(filtered);
                         this._allIngredients = filteredIngredients;
@@ -202,7 +205,7 @@ class App {
                         this.handleEquipmentInput();
                         this.handleUstensilsInput();
                         this.renderRecipes(filtered);
-                    });
+                    }
                 }
                 if (input.length >= 3 && filtered.length === 0) {
                     this.$badges.innerHTML = "";
@@ -213,7 +216,7 @@ class App {
                     this._allIngredients = this.getIngredients(this._allRecipes);
                 }
             })
-        })
+        }
     }
 
     //fonctionnalités du champ de recherche INGREDIENTS
@@ -282,9 +285,12 @@ class App {
     //valeur de retour TRUE si le tableau contient le SEARCH param
     findIngredient(ingredientsArray, search) {
         let isFound = false;
-        let ingredientsNames = ingredientsArray.map(r => r.ingredient);
-        for (let ingredient of ingredientsNames) {
-            if (ingredient.includes(search)) {
+        let ingredientsNames = [];
+        for (let i = 0; i < ingredientsArray.length; i++) {
+            ingredientsNames.push(ingredientsArray[i].ingredient);
+        }
+        for (let j = 0; j < ingredientsNames.length; j++) {
+            if (ingredientsNames[j].includes(search)) {
                 isFound = true;
             }
         }
