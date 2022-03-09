@@ -1,7 +1,7 @@
-import ListTemplate from "../Templates/listTemplate.js";
-import RecipeTemplate from "../Templates/RecipeTemplate.js";
+import ListTemplate from "./Templates/listTemplate.js";
+import RecipeTemplate from "./Templates/RecipeTemplate.js";
 import Api from "./../api/api.js";
-import BadgeTemplate from "../Templates/BadgeTemplate.js";
+import BadgeTemplate from "./Templates/BadgeTemplate.js";
 
 class App {
     constructor() {
