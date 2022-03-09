@@ -26,7 +26,7 @@ export default class RecipeTemplate {
                     <div class="recipe">
                         <div class="list-ingredients">
                             <ul class="list">
-                            ${this.getList()}
+                            ${this.getIngredientsItems()}
                             </ul>
                         </div>
                         <p class="instructions">${this._description}</p>
@@ -36,16 +36,16 @@ export default class RecipeTemplate {
         return cardContainer;
     }
 
-    getList() {
+    getIngredientsItems() {
         let list = "";
         this._ingredients.forEach(element => {
-            let item = this.getListItem(element);
+            let item = this.getItem(element);
             list += item;
         });
         return list;
     }
 
-    getListItem(element) {
+    getItem(element) {
         return (element.unit) ? `
         <li class="item">
             <span class="name fw-bold">${element.ingredient}</span>

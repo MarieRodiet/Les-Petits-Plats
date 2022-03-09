@@ -8,6 +8,7 @@ export default class ListTemplate {
         this._inputParent = input.parentNode;
         this._navParent = nav.parentNode
         this.$ulElement = document.createElement("ul");
+        console.log(this._list);
     }
 
     handleCloseNavBar(mainInput) {
@@ -34,6 +35,7 @@ export default class ListTemplate {
     }
 
     getList(items) {
+        console.log(items);
         this._nav.innerHTML = "";
         this.$ulElement.className = "scroll";
         this.$ulElement.setAttribute("role", "listbox");
