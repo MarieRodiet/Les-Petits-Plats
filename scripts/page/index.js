@@ -221,7 +221,6 @@ class App {
 
     //fonctionnalités du champ de recherche INGREDIENTS
     handleIngredientInput() {
-        console.log(this._allIngredients);
         let listTemplate = new ListTemplate(this._allIngredients, "ingredients", this.$ingredientsBtn, this.$ingredientsNav, this.$ingredientsInput);
         listTemplate.getList(this._allIngredients);
         this.handleInput(this.$ingredientsNav.firstChild, this.$ingredientsInput, listTemplate);
@@ -240,7 +239,6 @@ class App {
     //fonctionnalités du champ de recherche USTENSILS
     handleUstensilsInput() {
         let listTemplate = new ListTemplate(this._allUstensils, "ustensils", this.$ustensilsBtn, this.$ustensilsNav, this.$ustensilsInput);
-        console.log(listTemplate);
         listTemplate.getList(this._allUstensils);
         this.handleInput(this.$ustensilsNav.firstChild, this.$ustensilsInput, listTemplate);
         this.handleListClick(this.$ustensilsNav.firstChild, listTemplate);
