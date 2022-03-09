@@ -1,4 +1,4 @@
-import ListTemplate from "./../Templates/ListTemplate.js";
+import ListTemplate from "./../Templates/listTemplate.js";
 import RecipeTemplate from "./../Templates/RecipeTemplate.js";
 import BadgeTemplate from "./../Templates/BadgeTemplate.js";
 import Api from "./../api/api.js";
