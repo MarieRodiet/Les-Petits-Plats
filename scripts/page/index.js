@@ -50,7 +50,6 @@ class App {
         this.handleIngredientInput();
         this.handleEquipmentInput();
         this.handleUstensilsInput();
-
     }
 
     //instancier toutes les variables
@@ -296,8 +295,6 @@ class App {
         }
         return isFound;
     }
-
-
 
     isNewBadge(newBadge) {
         let isNew = true;
