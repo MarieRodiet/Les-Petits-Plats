@@ -77,6 +77,7 @@ export default class ListTemplate {
         this._input.placeholder = "Rechercher des " + this.getPlaceHolder().toLowerCase();
         this._input.classList.add("inputBottomRadiusRemoval");
         this._inputParent.classList.add("inputAndButtonExtended");
+        this._inputParent.parentNode.classList.add("input-groupExtanded");
         this._navParent.classList.add("navExtended");
         this._nav.classList.add("listExtended");
         this.$ulElement.style.display = "block";
@@ -89,6 +90,7 @@ export default class ListTemplate {
         this._btn.classList.remove("buttonBottomRadiusRemoval");
         this._input.placeholder = this.getPlaceHolder();
         this._input.classList.remove("inputBottomRadiusRemoval");
+        this._inputParent.parentNode.classList.remove("input-groupExtanded");
         this._inputParent.classList.remove("inputAndButtonExtended");
         this.$ulElement.setAttribute("aria-expanded", "false");
         this.$ulElement.style.display = "none";

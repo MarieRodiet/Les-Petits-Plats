@@ -1,0 +1,81 @@
+@import "variable_overrides.scss";
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/*MOBILE HEADER*/
+header {
+  #logo {
+    width: 160px;
+  }
+}
+
+.noResultMessage {
+  max-width: 450px;
+}
+
+/*RECIPES*/
+#recipes-container {
+  .recipe-box {
+
+    max-width: 380px;
+    height: 364px;
+    cursor: pointer;
+
+    .recipe-picture {
+      max-width: 380px;
+      height: 180px;
+      background-color: lighten($gray, 5%);
+    }
+
+    .recipe-content {
+      height: 180px;
+      background-color: lighten($gray, 20%);
+    }
+  }
+  .recipe-box:hover {
+    transform: scale(1.02);
+  }
+
+  .recipe-box:hover > .recipe-picture {
+    background-color: #997474;
+  }
+}
+
+.recipe-content {
+  .time-box svg {
+    width: 25px;
+    height: 25px;
+    fill: lighten($gray, 20%);
+    padding: 2px;
+    border-radius: 13px;
+  }
+
+  .list-ingredients {
+    white-space: nowrap;
+  }
+
+  .item {
+    font-size: 11px;
+  }
+
+  .instructions {
+    width: 170px;
+    height: 106px;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 6;
+    overflow: scroll;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+
+}

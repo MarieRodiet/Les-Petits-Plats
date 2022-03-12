@@ -8,7 +8,7 @@ export default class BadgeTemplate {
         let container = document.createElement("div");
         container.className = "badgeContainer";
         let badgeCard = `
-        <span tabindex="0" category="${this._category}" item="${this._item}" class="badge ${this._category}">
+        <span tabindex="0" category="${this._category}" item="${this._item}" class="m-1 p-2 badge ${this._category}">
             ${this._item}
             <svg viewBox="0 0 512 512">
             <g>

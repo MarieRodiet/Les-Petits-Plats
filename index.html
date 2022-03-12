@@ -5,55 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
     <title>Les Petits plats</title>
-    <link rel="stylesheet" href="node_modules/normalize.css/normalize.css">
-    <link href="/styles/index.css" rel="stylesheet">
-    <link href="/styles/inputs.css" rel="stylesheet">
-    <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles/css/styles.css" rel="stylesheet">
 </head>
 
-<body>
-    <header>
+<body class="position-relative container">
+    <header class="container-fluid mt-4 d-flex justify-content-center">
         <img id="logo" src="assets/logo.png" alt="Les Petits Plats logo">
     </header>
-    <main>
-        <section class="input-group" id="main-search-section">
-            <h1 class="src-only">Recherche Principal</h1>
-            <input id="main-input" class="shadow-none fs-6 border-0 p-3 form-control" type="text"
+
+    <main class="container">
+        <section class="container-fluid input-group d-flex justify-content-center" id="main-search-section">
+            <h1 class="src-only position-absolute p-0 m-0 overflow-hidden">Recherche Principale</h1>
+            <label class="visuallyhidden invisible" for="main-input">Recherche Principale</label>
+            <input id="main-input" class="rounded-start shadow-none fs-6 border-0 p-3 form-control" type="text"
                 placeholder="Rechercher des recettes par titre, ingrédients ou description">
-            <button class="shadow-none h-auto h-auto border-0 btn btn-secondary" id="main-search-btn" type="button">
+            <button aria-label="My button" class="shadow-none h-auto h-auto border-0 btn btn-secondary"
+                id="main-search-btn" type="button" value="search">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                     <path fill="currentColor"
                         d="M500.3 443.7l-119.7-119.7c27.22-40.41 40.65-90.9 33.46-144.7C401.8 87.79 326.8 13.32 235.2 1.723C99.01-15.51-15.51 99.01 1.724 235.2c11.6 91.64 86.08 166.7 177.6 178.9c53.8 7.189 104.3-6.236 144.7-33.46l119.7 119.7c15.62 15.62 40.95 15.62 56.57 0C515.9 484.7 515.9 459.3 500.3 443.7zM79.1 208c0-70.58 57.42-128 128-128s128 57.42 128 128c0 70.58-57.42 128-128 128S79.1 278.6 79.1 208z" />
                 </svg>
             </button>
         </section>
-        <div id="badges"></div>
 
-        <section id="secondary-search-section">
-            <h2 class="src-only">Recherches Secondaire</h2>
-            <div class="input-group" id="ingredients-search">
-                <div class="inputAndButton">
-                    <input id="input-ingredients" class="shadow-none text-white fs-6 border-0 p-2 pt-3 pb-3" type="text"
-                        placeholder="Ingrédients">
-                    <button class="s-search-btn shadow-none border-0 text-white" id="ingredients-btn" type="button">
+        <div id="badges" class="container-fluid d-flex justify-content-center flex-wrap">
+        </div>
+
+        <section id="secondary-search-section"
+            class="container-fluid d-flex flex-column align-items-center flex-md-row align-items-md-baseline">
+            <h2 class="src-only position-absolute p-0 m-0 overflow-hidden">Recherches Secondaires</h2>
+            <!--INGREDIENTS-->
+            <div class="mt-2 mx-1 mb-2 input-group d-flex flex-column align-items-center justify-content-center"
+                id="ingredients-search">
+                <div class="inputAndButton d-flex justify-content-center">
+                    <label class="visuallyhidden invisible" for="input-ingredients">Recherche par ingrédient</label>
+                    <input id="input-ingredients" class="w-75 rounded-start shadow-none text-white fs-6 border-0 p-2"
+                        type="text" placeholder="Ingrédients">
+                    <button aria-label="My button" class="w-25 rounded-end s-search-btn shadow-none border-0 text-white"
+                        id="ingredients-btn" type="button" value="search">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-                            <!--! Font Awesome Pro 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
                             <path fill="currentColor"
                                 d="M192 384c-8.188 0-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L192 306.8l137.4-137.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-160 160C208.4 380.9 200.2 384 192 384z" />
                         </svg>
                     </button>
                 </div>
-
-                <div class="navs">
+                <div class="navs d-flex flex-column justify-content-start position-absolute">
                     <nav id="ingredients-nav" class="bg-primary"></nav>
                 </div>
             </div>
-
-            <div class="input-group" id="equipments-search">
-                <div class="inputAndButton">
-                    <input id="input-equipments" class="shadow-none text-white fs-6 border-0 p-2 pt-3 pb-3" type="text"
-                        placeholder="Appareils">
-                    <button class="shadow-none s-search-btn border-0 text-white pl-3" id="equipments-btn" type="button">
+            <!--APPAREILS-->
+            <div class="mt-2 mb-2 mx-1 input-group d-flex flex-column align-items-center justify-content-center"
+                id="equipments-search">
+                <div class="inputAndButton d-flex justify-content-center">
+                    <label class="visuallyhidden invisible" for="input-equipments">Recherche par appareil</label>
+                    <input id="input-equipments" class="w-75 rounded-start shadow-none text-white fs-6 border-0 p-2"
+                        type="text" placeholder="Appareils">
+                    <button aria-label="My button"
+                        class="w-25 rounded-end shadow-none s-search-btn border-0 text-white pl-3" id="equipments-btn"
+                        type="button" value="search">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
                             <!--! Font Awesome Pro 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
                             <path fill="currentColor"
@@ -62,16 +71,20 @@
                     </button>
                 </div>
 
-                <div class="navs">
+                <div class="navs d-flex flex-column justify-content-start position-absolute">
                     <nav id="equipments-nav"></nav>
                 </div>
             </div>
-
-            <div class="input-group" id="ustensils-search">
-                <div class="inputAndButton">
-                    <input id="input-ustensils" class="shadow-none text-white fs-6 border-0 p-2 pt-3 pb-3" type="text"
-                        placeholder="Ustensiles">
-                    <button class="shadow-none s-search-btn border-0 text-white pl-3" id="ustensils-btn" type="button">
+            <!--USTENSILS-->
+            <div class="mt-2 mb-2 mx-1 input-group d-flex flex-column align-items-center justify-content-center"
+                id="ustensils-search">
+                <div class="inputAndButton d-flex justify-content-center">
+                    <label class="visuallyhidden invisible" for="input-ustensils">Recherche par ustensile</label>
+                    <input id="input-ustensils" class="w-75 rounded-start shadow-none text-white fs-6 border-0 p-2"
+                        type="text" placeholder="Ustensiles">
+                    <button aria-label="My button"
+                        class="w-25 rounded-end shadow-none s-search-btn border-0 text-white pl-3" id="ustensils-btn"
+                        type="button" value="search">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
                             <!--! Font Awesome Pro 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
                             <path fill="currentColor"
@@ -79,22 +92,23 @@
                         </svg>
                     </button>
                 </div>
-                <div class="navs">
+                <div class="navs d-flex flex-column justify-content-start position-absolute">
                     <nav id="ustensils-nav"></nav>
                 </div>
             </div>
         </section>
 
-        <article id="recipes-container">
-            <h2 class="src-only">Resultats de la recherche</h2>
+        <article id="recipes-container"
+            class="container-fluid mt-3 d-flex flex-column align-items-center flex-md-row flex-md-wrap justify-content-md-around justify-content-xl-between">
+            <h2 class="src-only position-absolute p-0 m-0 overflow-hidden">Resultats de la recherche</h2>
         </article>
 
-
     </main>
-
-    <script type="module" src="/scripts/page/index.js"></script>
-    <script type="module" src="/scripts/api/api.js"></script>
+    <script type="module" src="scripts/Templates/BadgeTemplate.js"></script>
+    <script type="module" src="scripts/Templates/RecipeTemplate.js"></script>
+    <script type="module" src="scripts/Templates/listTemplate.js"></script>
+    <script type="module" src="scripts/page/index.js"></script>
+    <script type="module" src="scripts/api/api.js"></script>
 </body>
-
 
 </html>

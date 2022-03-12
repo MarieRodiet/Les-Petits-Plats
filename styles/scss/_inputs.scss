@@ -1,0 +1,347 @@
+@import "variable_overrides.scss";
+//COLORS
+#input-ingredients::placeholder {
+  color: lighten($primary, 80%);
+}
+#input-ingredients:focus::placeholder {
+  color: lighten($primary, 20%);
+}
+
+#input-equipments::placeholder {
+  color: lighten($secondary, 80%);
+}
+
+#input-equipments:focus::placeholder {
+  color: lighten($secondary, 20%);
+}
+
+#input-ustensils::placeholder {
+  color: lighten($tertiary, 80%);
+}
+#input-ustensils:focus::placeholder {
+  color: lighten($tertiary, 20%);
+}
+
+#ingredients-search input,
+#ingredients-search button,
+#badges .ingredients {
+  background-color: $primary !important;
+}
+
+#equipments-search input,
+#equipments-search button,
+#equipments-nav,
+#badges .equipments {
+  background-color: $secondary !important;
+}
+
+#ustensils-search input,
+#ustensils-search button,
+#ustensils-nav,
+#badges .ustensils {
+  background-color: $tertiary !important;
+}
+
+/*MOBILE MAIN SEARCH*/
+#main-search-section {
+  margin: 0px auto;
+  height: 55px;
+
+  .src-only {
+    width: 1px;
+    height: 1px;
+    clip-path: content-box;
+    white-space: nowrap;
+  }
+
+  #main-input {
+    background-color: #e6e6e6;
+    width: calc(100% - 55px);
+  }
+
+  #main-input:focus + #main-search-btn {
+    color: $secondary;
+    background-color: #e2e3e5;
+  }
+
+  #main-input:focus {
+    background-color: #e2e3e5;
+  }
+
+  #main-input:focus::placeholder {
+    color: transparent;
+  }
+
+  #main-input::placeholder {
+    width: 100%;
+  }
+
+  #main-search-btn {
+    height: 55px;
+    width: 55px;
+    background-color: #e6e6e6;
+  }
+
+  #main-search-btn:hover {
+    background-color: #67d8a4;
+    color: white;
+  }
+
+  #main-search-btn svg {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+/*BADGES*/
+#badges {
+  margin: 30px auto 0px;
+  height: fit-content;
+
+  span {
+    font-size: 0.8rem;
+    font-weight: 400;
+    cursor: pointer;
+    color: white;
+
+    svg {
+      width: 18px;
+      height: 18px;
+      background-color: white;
+      padding: 1px;
+      border-radius: 25px;
+      margin: 0 2px 0 4px;
+
+      path.ingredients {
+        fill: $primary;
+      }
+      path.equipments {
+        fill: $secondary;
+      }
+      path.ustensils {
+        fill: $tertiary;
+      }
+    }
+  }
+
+  span:focus {
+    transform: scale(1.1);
+  }
+
+  span:hover > svg path.deleteSvg {
+    fill: #b6babe;
+  }
+
+  span:hover {
+    background-color: #b6babe;
+    color: white;
+  }
+}
+
+/*MOBILE SECONDARY SEARCH*/
+#secondary-search-section {
+  margin: 0 auto;
+
+  .src-only {
+    width: 1px;
+    height: 1px;
+    clip-path: content-box;
+    white-space: nowrap;
+  }
+
+  .input-group {
+    width: 100%;
+    max-width: 300px;
+
+    .inputAndButton {
+      border: none;
+      width: 100%;
+
+      label {
+        width: 1px;
+      }
+      input {
+        outline: none;
+      }
+
+      .s-search-btn {
+        border: none;
+        .up {
+          transform: rotate(180deg);
+        }
+
+        .down {
+          transform: rotate(0deg);
+        }
+        svg {
+          width: 40px;
+          height: 20px;
+        }
+      }
+
+      .inputBottomRadiusRemoval {
+        border-bottom-left-radius: 0 !important;
+      }
+
+      button:focus {
+        outline-style: solid;
+      }
+
+      .buttonBottomRadiusRemoval {
+        border-bottom-right-radius: 0 !important;
+      }
+    }
+
+    .inputAndButtonExtended {
+      max-width: 300px;
+    }
+
+    .inputAndButton:focus {
+      outline: none;
+    }
+
+    /*NAVS LISTS OF INPUTS*/
+    .navs {
+      width: 100%;
+      z-index: 2;
+
+      nav {
+        position: absolute;
+        z-index: 3;
+        top: 35px;
+        left: 2px;
+        border-radius: 5px;
+
+        ul {
+          display: none;
+          padding: 0 0 5px 12px;
+          margin: 0;
+          max-height: 400px;
+          overflow-y: scroll;
+
+          li {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            color: white;
+            line-height: 1.6;
+          }
+
+          li:hover {
+            color: #b6babe;
+            cursor: pointer;
+          }
+
+          li:focus {
+            outline: none;
+            font-size: large;
+            color: $gray;
+          }
+        }
+      }
+      .listExtended {
+        border-radius: 0px 0px 3px 3px !important;
+        width: calc(100% - 2px);
+      }
+    }
+
+    .navExtended {
+      width: 100%;
+    }
+  }
+}
+@media only screen and (min-width: 767px) {
+  #secondary-search-section {
+    .input-group {
+      width: 22%;
+      max-width: 300px;
+    }
+
+    .input-groupExtanded {
+      width: 50%;
+    }
+
+    .inputAndButtonExtended {
+      width: 50%;
+    }
+
+    .navExtended {
+      width: 50%;
+    }
+  }
+}
+
+@media only screen and (min-width: 1420px) {
+  #secondary-search-section {
+    .input-group {
+      width: 70%;
+      max-width: 150px;
+
+      .inputAndButtonExtended {
+        width: 100%;
+        max-width: 500px;
+      }
+    }
+
+    .navs {
+      width: 30%;
+      max-width: 150px;
+    }
+
+    .input-groupExtanded {
+      min-width: none;
+      max-width: 500px;
+    }
+
+    .navExtended {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .listExtended ul {
+      -webkit-column-count: 3;
+      -moz-column-count: 3;
+      column-count: 3;
+    }
+  }
+}
+
+/*@media only screen and (min-width: 1000px) {
+  #secondary-search-section {
+    .input-group {
+      width: 22%;
+      max-width: 360px;
+    }
+
+    .input-groupExtanded {
+      width: 50%;
+      max-width: 360px;
+    }
+
+    .inputAndButtonExtended {
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .navExtended {
+      width: 50%;
+      max-width: 360px;
+    }
+
+    .listExtended ul {
+      -webkit-column-count: 2;
+      -moz-column-count: 2;
+      column-count: 2;
+    }
+  }
+}
+
+@media only screen and (min-width: 1600px) {
+  .listExtended ul {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+  }
+}*/
