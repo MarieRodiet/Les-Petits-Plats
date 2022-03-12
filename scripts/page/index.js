@@ -276,7 +276,7 @@ class App {
 
     getErrorMessage() {
         const box = document.createElement("div");
-        box.className = "noResultMessage alert alert-warning";
+        box.className = "h-100 noResultMessage alert alert-warning w-100 p-4";
         box.innerHTML = `Aucune recherche ne correspond à votre critère ...  Vous pouvez chercher «tarte aux pommes», «poisson» etc ...`;
         this.$badges.appendChild(box);
     }

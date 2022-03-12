@@ -1,63 +1,57 @@
+@import "variable_overrides.scss";
 //COLORS
-#secondary-search-section input::placeholder {
-  color: white;
+#input-ingredients::placeholder {
+  color: lighten($primary, 80%);
 }
 #input-ingredients:focus::placeholder {
-  color: #9ec5fe;
+  color: lighten($primary, 20%);
 }
+
+#input-equipments::placeholder {
+  color: lighten($secondary, 80%);
+}
+
 #input-equipments:focus::placeholder {
-  color: #e1f7ed;
+  color: lighten($secondary, 20%);
+}
+
+#input-ustensils::placeholder {
+  color: lighten($tertiary, 80%);
 }
 #input-ustensils:focus::placeholder {
-  color: #f7c1bb;
+  color: lighten($tertiary, 20%);
 }
+
 #ingredients-search input,
-#ingredients-search button {
-  background-color: #0d6efd !important;
+#ingredients-search button,
+#badges .ingredients {
+  background-color: $primary !important;
 }
+
 #equipments-search input,
-#equipments-search button {
-  background-color: #67d8a4 !important;
-}
-#ustensils-search input,
-#ustensils-search button {
-  background-color: #ec6354;
-}
-#equipments-nav {
-  background-color: #67d8a4 !important;
-}
-#ustensils-nav {
-  background-color: #ec6354 !important;
-}
-#badges #badges #badges .ingredients {
-  background-color: #0d6efc;
-}
+#equipments-search button,
+#equipments-nav,
 #badges .equipments {
-  background-color: #67d8a4;
+  background-color: $secondary !important;
 }
+
+#ustensils-search input,
+#ustensils-search button,
+#ustensils-nav,
 #badges .ustensils {
-  background-color: #ec6354;
+  background-color: $tertiary !important;
 }
 
 /*MOBILE MAIN SEARCH*/
 #main-search-section {
-  display: flex;
-  justify-content: center;
-  width: 80%;
   margin: 0px auto;
   height: 55px;
-  max-width: 580px;
 
   .src-only {
-    position: absolute;
     width: 1px;
     height: 1px;
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
     clip-path: content-box;
     white-space: nowrap;
-    border: 0;
   }
 
   #main-input {
@@ -66,9 +60,10 @@
   }
 
   #main-input:focus + #main-search-btn {
-    color: #67d8a4;
+    color: $secondary;
     background-color: #e2e3e5;
   }
+
   #main-input:focus {
     background-color: #e2e3e5;
   }
@@ -100,17 +95,10 @@
 
 /*BADGES*/
 #badges {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  width: 80%;
-  height: fit-content;
   margin: 30px auto 0px;
+  height: fit-content;
 
   span {
-    margin: 5px;
-    padding: 9px 10px;
-    background-color: #0d6efc;
     font-size: 0.8rem;
     font-weight: 400;
     cursor: pointer;
@@ -125,13 +113,13 @@
       margin: 0 2px 0 4px;
 
       path.ingredients {
-        fill: #0d6efc;
+        fill: $primary;
       }
       path.equipments {
-        fill: #67d8a4;
+        fill: $secondary;
       }
       path.ustensils {
-        fill: #ec6354;
+        fill: $tertiary;
       }
     }
   }
@@ -152,53 +140,32 @@
 
 /*MOBILE SECONDARY SEARCH*/
 #secondary-search-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 90%;
   margin: 0 auto;
 
   .src-only {
-    position: absolute;
     width: 1px;
     height: 1px;
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
     clip-path: content-box;
     white-space: nowrap;
-    border: 0;
   }
 
   .input-group {
-    width: 90%;
-    min-width: 200px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-items: center;
-    margin: 3px;
+    width: 100%;
+    max-width: 300px;
 
     .inputAndButton {
-      display: flex;
-      width: 60%;
-      max-width: 380px;
       border: none;
-      border-radius: 0 3px 3px 0;
+      width: 100%;
+
       label {
         width: 1px;
       }
       input {
-        width: 75%;
         outline: none;
-        min-width: 100px;
-        border-radius: 3px 0 0 3px;
       }
 
       .s-search-btn {
-        width: 25%;
         border: none;
-        border-radius: 0 3px 3px 0;
         .up {
           transform: rotate(180deg);
         }
@@ -226,8 +193,7 @@
     }
 
     .inputAndButtonExtended {
-      width: 100%;
-      max-width: 350px;
+      max-width: 300px;
     }
 
     .inputAndButton:focus {
@@ -236,17 +202,13 @@
 
     /*NAVS LISTS OF INPUTS*/
     .navs {
-      position: absolute;
+      width: 100%;
       z-index: 2;
-      display: flex;
-      flex-direction: column;
-      justify-content: start;
-      width: 60%;
+
       nav {
-        width: calc(100% - 1px);
         position: absolute;
         z-index: 3;
-        top: 60px;
+        top: 35px;
         left: 2px;
         border-radius: 5px;
 
@@ -254,12 +216,10 @@
           display: none;
           padding: 0 0 5px 12px;
           margin: 0;
-          height: fit-content;
           max-height: 400px;
-          overflow: scroll;
+          overflow-y: scroll;
 
           li {
-            width: 99%;
             overflow: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
@@ -277,117 +237,111 @@
           li:focus {
             outline: none;
             font-size: large;
-            color: #b6babe;
+            color: $gray;
           }
         }
       }
       .listExtended {
         border-radius: 0px 0px 3px 3px !important;
+        width: calc(100% - 2px);
       }
     }
 
     .navExtended {
       width: 100%;
-      max-width: 350px;
+    }
+  }
+}
+@media only screen and (min-width: 767px) {
+  #secondary-search-section {
+    .input-group {
+      width: 22%;
+      max-width: 300px;
+    }
+
+    .input-groupExtanded {
+      width: 50%;
+    }
+
+    .inputAndButtonExtended {
+      width: 50%;
+    }
+
+    .navExtended {
+      width: 50%;
     }
   }
 }
 
-/* BIG TABLET VERSION */
-@media only screen and (min-width: 800px) {
-  #main-search-section {
-    width: 75%;
-    max-width: none;
-  }
-}
-
-@media only screen and (min-width: 950px) {
-  #main-search-section {
-    width: 75%;
-    max-width: none;
-  }
-
+@media only screen and (min-width: 1420px) {
   #secondary-search-section {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    flex-wrap: wrap;
-    width: 75%;
-    margin: 0 auto;
-    justify-content: start;
-
     .input-group {
-      display: flex;
-      flex-direction: column;
-      align-items: start;
-      width: fit-content;
-      margin: 0px;
-
-      .inputAndButton {
-        width: 140px;
-        margin: 10px 0;
-
-        input {
-          width: inherit;
-        }
-
-        .s-search-btn {
-          width: inherit;
-        }
-
-        .inputBottomRadiusRemoval {
-          width: 350px;
-        }
-        .buttonBottomRadiusRemoval {
-          width: 50px;
-        }
-      }
+      width: 70%;
+      max-width: 150px;
 
       .inputAndButtonExtended {
-        max-width: none;
-        width: 400px;
-        margin-right: 10px;
-      }
-
-      .navs {
         width: 100%;
-        min-width: 200px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        nav ul {
-          max-height: 250px;
-        }
-
-        .listExtended ul {
-          -webkit-column-count: 2;
-          -moz-column-count: 2;
-          column-count: 2;
-        }
+        max-width: 500px;
       }
+    }
 
-      .navExtended {
-        width: 100%;
-        max-width: 400px;
-      }
+    .navs {
+      width: 30%;
+      max-width: 150px;
+    }
+
+    .input-groupExtanded {
+      min-width: none;
+      max-width: 500px;
+    }
+
+    .navExtended {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .listExtended ul {
+      -webkit-column-count: 3;
+      -moz-column-count: 3;
+      column-count: 3;
     }
   }
 }
 
-@media only screen and (min-width: 1500px) {
-  .inputAndButtonExtended {
-    width: 670px;
-  }
+/*@media only screen and (min-width: 1000px) {
+  #secondary-search-section {
+    .input-group {
+      width: 22%;
+      max-width: 360px;
+    }
 
-  .navExtended {
-    max-width: 670px;
-  }
+    .input-groupExtanded {
+      width: 50%;
+      max-width: 360px;
+    }
 
+    .inputAndButtonExtended {
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .navExtended {
+      width: 50%;
+      max-width: 360px;
+    }
+
+    .listExtended ul {
+      -webkit-column-count: 2;
+      -moz-column-count: 2;
+      column-count: 2;
+    }
+  }
+}
+
+@media only screen and (min-width: 1600px) {
   .listExtended ul {
     -webkit-column-count: 3;
     -moz-column-count: 3;
     column-count: 3;
-    max-height: 250px;
   }
-}
+}*/
