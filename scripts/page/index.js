@@ -147,7 +147,7 @@ class App {
     filterRecipes() {
         let filtered = [];
         this._allBadges.forEach(badge => {
-            this._allRecipes.map(recipe => {
+            this._allRecipes.forEach(recipe => {
                 if (badge.category === "ingredients") {
                     if (this.findIngredient(recipe[badge.category], badge.item)) {
                         filtered.push(recipe);
@@ -158,12 +158,8 @@ class App {
                         filtered.push(recipe);
                     }
                 }
-                if (badge.category === "ustensils") {
-                    for (let ustensils of recipe[badge.category]) {
-                        if (badge.item === ustensils) {
-                            filtered.push(recipe);
-                        }
-                    }
+                if (badge.category === "ustensils" && recipe[badge.category].includes(badge.item.toLowerCase())) {
+                    filtered.push(recipe);
                 }
             })
         })
@@ -174,37 +170,33 @@ class App {
     handleMainInput() {
         let events = ["focus", "keyup", "change", "Backspace"];
         for (let i = 0; i < events.length; i++) {
+            let filtered = [];
             this.$mainInput.addEventListener(events[i], (event) => {
                 let input = event.target.value.toLowerCase();
-                let filtered = [];
                 if (input.length >= 3 || input.length > 0 && event.key === "Backspace") {
                     this.$badges.innerHTML = "";
                     const regex = new RegExp(input);
-                    for (let j = 0; j < this._allRecipes.length; j++) {
-                        if (regex.test(this._allRecipes[j].name.toLowerCase())) {
-                            filtered.push(this._allRecipes[j]);
-                        }
-                        else if (regex.test(this._allRecipes[j].description.toLowerCase())) {
-                            filtered.push(this._allRecipes[j]);
-                        }
-                        else if (this.findIngredient(this._allRecipes[j].ingredients, input)) {
-                            filtered.push(this._allRecipes[j]);
-                        }
-                        let filteredIngredients = this.getIngredients(filtered);
-                        let filteredEquipments = [];
-                        for (let d = 0; d < filtered.length; d++) {
-                            filteredEquipments.push(filtered[d].appliance);
-                        }
-                        let filteredEquipmentsSingles = this.removeDoubleFromArray(filteredEquipments.flat())
-                        let filteredUstensils = this.getUstensils(filtered);
-                        this._allIngredients = filteredIngredients;
-                        this._allAppliances = filteredEquipmentsSingles;
-                        this._allUstensils = filteredUstensils;
-                        this.handleIngredientInput();
-                        this.handleEquipmentInput();
-                        this.handleUstensilsInput();
-                        this.renderRecipes(filtered);
-                    }
+                    const result = this._allRecipes.filter(element =>
+                        regex.test(element.name.toLowerCase()) ||
+                        regex.test(element.description.toLowerCase()) ||
+                        this.findIngredient(element.ingredients, input)
+                    );
+                    filtered = result;
+
+                    //extraction par propriétés
+                    let filteredIngredients = this.getIngredients(filtered);
+                    let filteredEquipments = filtered.map(element => element.appliance);
+                    let filteredEquipmentsSingles = this.removeDoubleFromArray(filteredEquipments.flat())
+                    let filteredUstensils = this.getUstensils(filtered);
+
+                    this._allIngredients = filteredIngredients;
+                    this._allAppliances = filteredEquipmentsSingles;
+                    this._allUstensils = filteredUstensils;
+
+                    this.handleIngredientInput();
+                    this.handleEquipmentInput();
+                    this.handleUstensilsInput();
+                    this.renderRecipes(filtered);
                 }
                 if (input.length >= 3 && filtered.length === 0) {
                     this.$badges.innerHTML = "";

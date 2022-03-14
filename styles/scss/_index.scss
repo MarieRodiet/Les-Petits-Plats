@@ -21,7 +21,6 @@ header {
 /*RECIPES*/
 #recipes-container {
   .recipe-box {
-
     max-width: 380px;
     height: 364px;
     cursor: pointer;
@@ -76,6 +75,8 @@ header {
   }
 }
 
-@media only screen and (min-width: 1000px) {
-
+@media only screen and (min-width: 1400px) {
+  #recipes-container {
+    justify-content: space-between !important;
+  }
 }

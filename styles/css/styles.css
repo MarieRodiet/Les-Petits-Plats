@@ -63,6 +63,11 @@ header #logo {
   overflow: scroll;
 }
 
+@media only screen and (min-width: 1400px) {
+  #recipes-container {
+    justify-content: space-between !important;
+  }
+}
 #input-ingredients::placeholder {
   color: white;
 }
@@ -177,15 +182,21 @@ header #logo {
 #badges span svg path.ustensils {
   fill: #ec6354;
 }
+#badges span svg span:hover > svg path.deleteSvg {
+  fill: #b6babe;
+}
+#badges span span:hover {
+  background-color: #b6babe;
+  color: white;
+}
+#badges span span:hover > svg path.deleteSvg {
+  fill: #b6babe;
+}
 #badges span:focus {
   transform: scale(1.1);
 }
 #badges span:hover > svg path.deleteSvg {
   fill: #b6babe;
-}
-#badges span:hover {
-  background-color: #b6babe;
-  color: white;
 }
 
 /*MOBILE SECONDARY SEARCH*/
@@ -327,43 +338,6 @@ header #logo {
     column-count: 3;
   }
 }
-/*@media only screen and (min-width: 1000px) {
-  #secondary-search-section {
-    .input-group {
-      width: 22%;
-      max-width: 360px;
-    }
-
-    .input-groupExtanded {
-      width: 50%;
-      max-width: 360px;
-    }
-
-    .inputAndButtonExtended {
-      width: 100%;
-      max-width: 360px;
-    }
-
-    .navExtended {
-      width: 50%;
-      max-width: 360px;
-    }
-
-    .listExtended ul {
-      -webkit-column-count: 2;
-      -moz-column-count: 2;
-      column-count: 2;
-    }
-  }
-}
-
-@media only screen and (min-width: 1600px) {
-  .listExtended ul {
-    -webkit-column-count: 3;
-    -moz-column-count: 3;
-    column-count: 3;
-  }
-}*/
 /*!
  * Bootstrap v5.1.3 (https://getbootstrap.com/)
  * Copyright 2011-2021 The Bootstrap Authors
