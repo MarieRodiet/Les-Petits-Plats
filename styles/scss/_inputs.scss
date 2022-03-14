@@ -1,6 +1,7 @@
 @import "variable_overrides";
 @import "./../../node_modules/bootstrap/scss/bootstrap";
 @import "./../../node_modules/bootstrap/scss/variables";
+
 //COLORS
 #input-ingredients::placeholder {
   color: lighten($primary, 80%);

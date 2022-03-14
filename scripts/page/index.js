@@ -5,39 +5,39 @@ import Api from "./../api/api.js";
 
 class App {
     constructor() {
-        //variables stockant les données triées et formatées du ficher JSON
+        //variables from JSON file
         this._allRecipes = null;
         this._allAppliances = null;
         this._allIngredients = null;
         this._allUstensils = null;
 
-        //variables modifiables, au service de l'utilisateur 
+        //variables for manipulating DOM
         this._allBadges = [];
         this._closeNavBar = false;
         this._navToBeClosed = null;
 
-        //DOM element: champ de recherche principal
+        //DOM element: main input
         this.$mainInput = document.querySelector("#main-input");
 
         //DOM element: badges
         this.$badges = document.querySelector("#badges");
 
-        //DOM element: les NAVS
+        //DOM element: NAV bars
         this.$ingredientsNav = document.querySelector("#ingredients-nav");
         this.$equipmentsNav = document.querySelector("#equipments-nav");
         this.$ustensilsNav = document.querySelector("#ustensils-nav");
 
-        //DOM element: les INPUTS
+        //DOM element: INPUTS
         this.$ingredientsInput = document.querySelector("#input-ingredients");
         this.$equipmentsInput = document.querySelector("#input-equipments");
         this.$ustensilsInput = document.querySelector("#input-ustensils");
 
-        //DOM element: les BTNS
+        //DOM element: BTNS
         this.$ingredientsBtn = document.querySelector("#ingredients-btn");
         this.$equipmentsBtn = document.querySelector("#equipments-btn");
         this.$ustensilsBtn = document.querySelector("#ustensils-btn");
 
-        //DOM element: recettes
+        //DOM element: recipes
         this.$recipeContainer = document.querySelector("#recipes-container");
     }
 
@@ -52,7 +52,7 @@ class App {
         this.handleUstensilsInput();
     }
 
-    //instancier toutes les variables
+    //instantiation of main variables
     async getData() {
         const API = new Api("data/recipes.json");
         this._allRecipes = await API.getJsonData();
@@ -61,7 +61,7 @@ class App {
         this._allIngredients = this.getIngredients(this._allRecipes);
     }
 
-    //obtenir les ustensils
+    //get ustensils from recipes
     getUstensils(allRecipes) {
         let ustensilsArrays = allRecipes.map(element => element["ustensils"]);
         let ustensils = ustensilsArrays.flat().map(element => this.getItCapitalized(element));
@@ -69,7 +69,7 @@ class App {
         return this.sortAlphabetically(unique);
     }
 
-    //obtenir les appareils
+    //get appliances from recipes
     getAppliances(allRecipes) {
         let result = allRecipes.map(element => element["appliance"]);
         let unique = this.removeDoubleFromArray(result);
@@ -77,7 +77,7 @@ class App {
         return this.sortAlphabetically(result);
     }
 
-    //obtenir les ingredients
+    //get ingredients from recipes
     getIngredients(allRecipes) {
         const ingredientsArray = allRecipes.map(element => element["ingredients"]);
         let ingredients = [];
@@ -134,7 +134,7 @@ class App {
         return unique;
     }
 
-    //insertion des recettes dans le DOM
+    //recipes inserted in DOM
     renderRecipes(recipes) {
         this.$recipeContainer.innerHTML = "";
         recipes.forEach(element => {
@@ -143,7 +143,7 @@ class App {
         });
     }
 
-    //filtrer les recettes selon les badges
+    //filtrer recipes by badges
     filterRecipes() {
         let filtered = [];
         this._allBadges.forEach(badge => {
@@ -166,15 +166,14 @@ class App {
         this.renderRecipes(this.removeDoubleFromArray(filtered));
     }
 
-    //fonctionnalités du champ de recherche principal
+    //main input fonctionality
     handleMainInput() {
         let events = ["focus", "keyup", "change", "Backspace"];
-        for (let i = 0; i < events.length; i++) {
+        events.forEach(event => {
             let filtered = [];
-            this.$mainInput.addEventListener(events[i], (event) => {
+            this.$mainInput.addEventListener(event, (event) => {
                 let input = event.target.value.toLowerCase();
                 if (input.length >= 3 || input.length > 0 && event.key === "Backspace") {
-                    this.$badges.innerHTML = "";
                     const regex = new RegExp(input);
                     const result = this._allRecipes.filter(element =>
                         regex.test(element.name.toLowerCase()) ||
@@ -199,7 +198,6 @@ class App {
                     this.renderRecipes(filtered);
                 }
                 if (input.length >= 3 && filtered.length === 0) {
-                    this.$badges.innerHTML = "";
                     this.getErrorMessage();
                     this.renderRecipes(this._allRecipes);
                     this._allAppliances = this.getAppliances(this._allRecipes);
@@ -207,10 +205,10 @@ class App {
                     this._allIngredients = this.getIngredients(this._allRecipes);
                 }
             })
-        }
+        });
     }
 
-    //fonctionnalités du champ de recherche INGREDIENTS
+    //INGREDIENTS
     handleIngredientInput() {
         let listTemplate = new ListTemplate(this._allIngredients, "ingredients", this.$ingredientsBtn, this.$ingredientsNav, this.$ingredientsInput);
         listTemplate.getList(this._allIngredients);
@@ -219,7 +217,7 @@ class App {
         listTemplate.handleCloseNavBar(this.$mainInput);
 
     }
-    //fonctionnalités du champ de recherche APPAREILS
+    //EQUIPMENT
     handleEquipmentInput() {
         let listTemplate = new ListTemplate(this._allAppliances, "equipments", this.$equipmentsBtn, this.$equipmentsNav, this.$equipmentsInput);
         listTemplate.getList(this._allAppliances);
@@ -227,7 +225,7 @@ class App {
         this.handleListClick(this.$equipmentsNav.firstChild, listTemplate);
         listTemplate.handleCloseNavBar(this.$mainInput);
     }
-    //fonctionnalités du champ de recherche USTENSILS
+    //USTENSILS
     handleUstensilsInput() {
         let listTemplate = new ListTemplate(this._allUstensils, "ustensils", this.$ustensilsBtn, this.$ustensilsNav, this.$ustensilsInput);
         listTemplate.getList(this._allUstensils);
@@ -236,7 +234,7 @@ class App {
         listTemplate.handleCloseNavBar(this.$mainInput);
     }
 
-    //saisie dans input permet de modifier la liste du NAV UL
+    //input entered by the user updates list in nav
     handleInput(ul, input, listTemplate) {
         input.addEventListener("keyup", (event) => {
             listTemplate.getUpdatedList(event);
@@ -244,14 +242,13 @@ class App {
         })
     }
 
-    //fonctionnalités des elements LI pour ajouter un badge et fermer le NAV UL
+    //li elements can add new badge
     handleListClick(ul, listTemplate) {
         let events = ["click", "keyup"];
         let liElements = ul.querySelectorAll("li");
         for (const li of liElements) {
             events.forEach(eventListener => {
                 li.addEventListener(eventListener, (event) => {
-                    console.log(event);
                     if (event.key === "Enter" || event.type === "click") {
                         listTemplate.closeNavBar();
                         let badge = this.createBadge(event.srcElement);
@@ -273,7 +270,7 @@ class App {
         this.$badges.appendChild(box);
     }
 
-    //valeur de retour TRUE si le tableau contient le SEARCH param
+    //true if search is found
     findIngredient(ingredientsArray, search) {
         let isFound = false;
         let ingredientsNames = [];
@@ -315,7 +312,7 @@ class App {
             }
         }
     }
-
+    //new badge creation
     createBadge(data) {
         return {
             category: data.getAttribute("category"),
@@ -323,7 +320,7 @@ class App {
         }
     }
 
-    //creation d'un nouveau badge
+    //add new badge, filter recipes and closeNav()
     handleAddBadge(newBadge, listTemplate) {
         let events = ["click", "keypress"];
         if (this._allBadges.length === 0 || this.isNewBadge(newBadge)) {
