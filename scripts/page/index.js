@@ -21,6 +21,7 @@ class App {
 
         //DOM element: badges
         this.$badges = document.querySelector("#badges");
+        this.$error = document.querySelector("#error");
 
         //DOM element: NAV bars
         this.$ingredientsNav = document.querySelector("#ingredients-nav");
@@ -173,7 +174,11 @@ class App {
             let filtered = [];
             this.$mainInput.addEventListener(event, (event) => {
                 let input = event.target.value.toLowerCase();
+                if (this._allBadges.length > 0) {
+                    this.filterRecipes();
+                }
                 if (input.length >= 3 || input.length > 0 && event.key === "Backspace") {
+                    this.$error.innerHTML = "";
                     const regex = new RegExp(input);
                     const result = this._allRecipes.filter(element =>
                         regex.test(element.name.toLowerCase()) ||
@@ -198,6 +203,7 @@ class App {
                     this.renderRecipes(filtered);
                 }
                 if (input.length >= 3 && filtered.length === 0) {
+                    this.$error.innerHTML = "";
                     this.getErrorMessage();
                     this.renderRecipes(this._allRecipes);
                     this._allAppliances = this.getAppliances(this._allRecipes);
@@ -267,7 +273,7 @@ class App {
         const box = document.createElement("div");
         box.className = "h-100 noResultMessage alert alert-warning w-100 p-4";
         box.innerHTML = `Aucune recherche ne correspond à votre critère ...  Vous pouvez chercher «tarte aux pommes», «poisson» etc ...`;
-        this.$badges.appendChild(box);
+        this.$error.appendChild(box);
     }
 
     //true if search is found
