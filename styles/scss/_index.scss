@@ -1,6 +1,6 @@
-@import "variable_overrides.scss";
-@import "./../../node_modules/bootstrap/scss/bootstrap.scss";
-@import "./../../node_modules/bootstrap/scss/variables.scss";
+@import "variable_overrides";
+@import "./../../node_modules/bootstrap/scss/bootstrap";
+@import "./../../node_modules/bootstrap/scss/variables";
 *,
 *::before,
 *::after {
