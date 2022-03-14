@@ -1,4 +1,6 @@
 @import "variable_overrides.scss";
+@import "./../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "./../../node_modules/bootstrap/scss/variables.scss";
 *,
 *::before,
 *::after {
@@ -28,20 +30,22 @@ header {
     .recipe-picture {
       max-width: 380px;
       height: 180px;
-      background-color: lighten($gray, 5%);
+      background-color: $picture;
     }
 
     .recipe-content {
       height: 180px;
-      background-color: lighten($gray, 20%);
+      background-color: $gray-200;
     }
   }
-  .recipe-box:hover {
+  .recipe-box:hover,
+  .recipe-box:focus {
     transform: scale(1.02);
   }
 
-  .recipe-box:hover > .recipe-picture {
-    background-color: #997474;
+  .recipe-box:hover > .recipe-picture,
+  .recipe-box:focus > .recipe-picture {
+    background-color: darken($picture, 10%);
   }
 }
 
@@ -49,7 +53,7 @@ header {
   .time-box svg {
     width: 25px;
     height: 25px;
-    fill: lighten($gray, 20%);
+    fill: $gray-200;
     padding: 2px;
     border-radius: 13px;
   }

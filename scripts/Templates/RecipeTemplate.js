@@ -9,6 +9,7 @@ export default class RecipeTemplate {
     renderRecipe() {
         let cardContainer = document.createElement("div");
         cardContainer.className = "w-100 recipe-box d-flex flex-column pt-2 pb-2";
+        cardContainer.setAttribute("tabindex", "0");
         let card = `
                 <div class="recipe-picture rounded-top"></div>
                 <div class="recipe-content rounded-bottom">

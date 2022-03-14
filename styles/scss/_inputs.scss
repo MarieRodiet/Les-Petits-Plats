@@ -1,4 +1,6 @@
 @import "variable_overrides.scss";
+@import "./../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "./../../node_modules/bootstrap/scss/variables.scss";
 //COLORS
 #input-ingredients::placeholder {
   color: lighten($primary, 80%);
@@ -135,12 +137,9 @@
     }
   }
 
-  span:focus {
+  span:focus,
+  span:hover {
     transform: scale(1.1);
-  }
-
-  span:hover > svg path.deleteSvg {
-    fill: #b6babe;
   }
 }
 
